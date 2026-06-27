@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  GSD Phase Template — Frontend (React 18 + TypeScript + Redux Toolkit)
+  ─────────────────────────────────────────────────────────────────────
+  HOW TO USE:
+  1. Copy this file as: .planning/phases/phase-XX-<name>.xml
+  2. Fill in all placeholders marked with [DESCRIBE]
+  3. Max 3 tasks per phase — if you need more, create a second phase
+  4. Each task is handed to a fresh subagent; be explicit and complete
+  5. Orchestrator reads this file, spawns agents, awaits results, commits
+
+  AGENT CONTRACT:
+  - Agent reads .planning/context/project.md FIRST
+  - Agent reads only the <context_files> listed
+  - Agent touches only the <files_to_touch> listed
+  - Agent runs `npm run typecheck` before reporting done
+  - Agent outputs a brief summary of what was changed
+-->
+<phase id="XX" name="[phase-name-with-hyphens]" status="pending">
+  <description>
+    [One sentence: what capability does this phase deliver?]
+  </description>
+
+  <!--
+    Skills to load. Reference relevant SKILL.md files.
+    Available skills are in frontend/skills/ folder.
+    Common choices for frontend tasks:
+      frontend/skills/react-best-practices/SKILL.md
+      frontend/skills/typescript-expert/SKILL.md
+      frontend/skills/frontend-developer/SKILL.md
+      frontend/skills/frontend-security-coder/SKILL.md
+      frontend/skills/frontend-design/SKILL.md
+  -->
+  <skills>
+    <skill>frontend/skills/react-best-practices/SKILL.md</skill>
+    <skill>frontend/skills/typescript-expert/SKILL.md</skill>
+  </skills>
+
+  <context_files>
+    <!-- Files the agent MUST read before starting. Be precise. -->
+    <file>frontend/.planning/context/project.md</file>
+    <file>frontend/src/types/index.ts</file>
+    <!-- Add more as needed:
+    <file>frontend/src/services/api/apiClient.ts</file>
+    <file>frontend/src/store/slices/authSlice.ts</file>
+    <file>frontend/src/hooks/useAuth.ts</file>
+    -->
+  </context_files>
+
+  <tasks>
+    <!-- MAX 3 TASKS PER PHASE -->
+
+    <task id="XX-1" status="pending">
+      <title>[Short imperative title — e.g., "Add product types and service"]</title>
+      <description>
+        [Precise description. Include:]
+        - What file(s) to create or modify
+        - What types/interfaces to add to types/index.ts
+        - What API endpoints to call (method + path + payload + response shape)
+        - What the service functions should be named
+        - What NOT to change
+        [Acceptance criteria:]
+        - [ ] File exists at src/services/api/productService.ts
+        - [ ] npm run typecheck passes
+      </description>
+      <files_to_touch>
+        <file action="modify">frontend/src/types/index.ts</file>
+        <file action="create">frontend/src/services/api/[resource]Service.ts</file>
+      </files_to_touch>
+    </task>
+
+    <task id="XX-2" status="pending">
+      <title>[Short imperative title — e.g., "Create products Redux slice"]</title>
+      <description>
+        [Precise description. Include:]
+        - Slice name, initial state shape
+        - AsyncThunks to implement (name + what service function to call)
+        - Selectors to export
+        - Register in store/index.ts
+
+        [Acceptance criteria:]
+        - [ ] Slice file exists at src/store/slices/[resource]Slice.ts
+        - [ ] Slice registered in src/store/index.ts
+        - [ ] npm run typecheck passes
+      </description>
+      <files_to_touch>
+        <file action="create">frontend/src/store/slices/[resource]Slice.ts</file>
+        <file action="modify">frontend/src/store/index.ts</file>
+      </files_to_touch>
+    </task>
+
+    <task id="XX-3" status="pending">
+      <title>[Short imperative title — e.g., "Build products hook and page"]</title>
+      <description>
+        [Precise description. Include:]
+        - Hook name and what it exposes (fields + actions)
+        - Page component location and what it renders
+        - Route to register in App.tsx (if new route)
+        - Loading / error / empty states that must be handled
+
+        [Acceptance criteria:]
+        - [ ] Hook exists at src/hooks/use[Resource].ts
+        - [ ] Page exists at src/pages/[Resource]/index.tsx
+        - [ ] All three states handled (loading, error, empty)
+        - [ ] npm run typecheck passes
+      </description>
+      <files_to_touch>
+        <file action="create">frontend/src/hooks/use[Resource].ts</file>
+        <file action="create">frontend/src/pages/[Resource]/index.tsx</file>
+        <file action="modify">frontend/src/App.tsx</file>
+      </files_to_touch>
+    </task>
+
+  </tasks>
+
+  <done_criteria>
+    - All tasks marked done
+    - `cd frontend && npm run typecheck` passes with zero errors
+    - `cd frontend && npm run lint` passes with zero errors
+    - All loading / error / empty states handled in UI
+    - No `console.log` left in touched files
+  </done_criteria>
+</phase>

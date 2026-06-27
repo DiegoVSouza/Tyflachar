@@ -1,0 +1,52 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-right: 1px solid var(--border-color);
+  background: var(--bg-surface);
+}
+
+.filters {
+  display: flex;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.filterBtn {
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  color: var(--text-secondary);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  padding: var(--space-1) var(--space-3);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filterBtn:hover {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+.filtroBtn.filterActive {
+  background: var(--color-primary-50);
+  border-color: var(--color-primary-200);
+  color: var(--brand-primary);
+  font-weight: var(--font-semibold);
+}
+
+.list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.state {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-align: center;
+  padding: var(--space-12) var(--space-4);
+  margin: 0;
+}

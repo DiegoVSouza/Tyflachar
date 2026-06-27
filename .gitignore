@@ -1,0 +1,42 @@
+# ─── Frontend ───────────────────────────────────────────
+apps/frontend/node_modules/
+apps/frontend/build/
+apps/frontend/.env
+apps/frontend/.env.local
+apps/frontend/.env.*.local
+
+# ─── Backend ────────────────────────────────────────────
+apps/backend/*.env
+apps/backend/.env
+apps/backend/server
+apps/backend/tmp/
+
+# ─── Go ─────────────────────────────────────────────────
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+vendor/
+
+# ─── Node ───────────────────────────────────────────────
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ─── OS ─────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── IDEs ───────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ─── Docker ─────────────────────────────────────────────
+# (docker-compose.override.yml pode ser local)
+docker-compose.override.yml

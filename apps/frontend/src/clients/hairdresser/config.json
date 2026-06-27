@@ -1,0 +1,210 @@
+{
+  "slug": "hairdresser",
+  "meta": {
+    "title": "Hairdresser | Especialista em Cachos Naturais",
+    "description": "Especialistas na curadoria de texturas naturais. Elevamos a beleza das onduladas, cacheadas e crespas através de experiências personalizadas de alta performance.",
+    "themeColor": "#0d0803"
+  },
+  "brand": {
+    "name": "Hairdresser",
+    "logoSrc": "/clients/hairdresser/logo.svg",
+    "tagline": "Curadoria para onduladas, cacheadas e crespas."
+  },
+  "theme": {
+    "colorPrimary": "#c9a87c",
+    "colorSecondary": "#e8d5b0",
+    "colorBg": "#0d0803",
+    "colorSurface": "#140e06",
+    "colorAccentWarm": "#c9a87c",
+    "fontHeading": "Cormorant Garamond",
+    "fontBody": "Inter"
+  },
+  "nav": {
+    "links": [
+      {
+        "label": "O Salão",
+        "href": "#salon"
+      },
+      {
+        "label": "Nossa Arte",
+        "href": "#art"
+      },
+      {
+        "label": "Profissionais",
+        "href": "#team"
+      },
+      {
+        "label": "Blog",
+        "href": "#blog"
+      }
+    ],
+    "ctaLabel": "Agendar Experiência",
+    "ctaHref": "#agendar"
+  },
+  "footer": {
+    "columns": [
+      {
+        "title": "Navegação",
+        "links": [
+          {
+            "label": "O Salão",
+            "href": "#salon"
+          },
+          {
+            "label": "Nossa Arte",
+            "href": "#art"
+          },
+          {
+            "label": "Profissionais",
+            "href": "#team"
+          },
+          {
+            "label": "Agendamento",
+            "href": "#agendar"
+          }
+        ]
+      },
+      {
+        "title": "Conecte-se",
+        "links": [
+          {
+            "label": "Instagram",
+            "href": "https://instagram.com/"
+          },
+          {
+            "label": "WhatsApp",
+            "href": "https://wa.me/"
+          },
+          {
+            "label": "Localização",
+            "href": "https://maps.google.com/"
+          },
+          {
+            "label": "Termos de Uso",
+            "href": "/termos"
+          }
+        ]
+      }
+    ],
+    "copyright": "© 2024 Hairdresser. Todos os direitos reservados."
+  },
+  "pages": {
+    "landing": {
+      "hero": {
+        "imageSrc": "/clients/hairdresser/images/hero.jpg",
+        "headline": "A Arte de Esculpir",
+        "headlineEm": "Seus Cachos",
+        "subtext": "Especialistas na curadoria de texturas naturais. Elevamos a beleza das onduladas, cacheadas e crespas através de experiências personalizadas de alta performance.",
+        "ctaPrimary": "Reservar Experiência",
+        "ctaSecondary": "Conhecer Serviços"
+      },
+      "philosophy": {
+        "eyebrow": "Nossa Filosofia",
+        "imageSrc": "/clients/hairdresser/images/gallery-01.jpg",
+        "imageAlt": "Mãos do estilista cuidando de um cacho",
+        "quote": "Cachos são versos de uma história que merece ser contada com amor.",
+        "titleLine1": "Esculpir, Nutrir e",
+        "titleEm": "Empoderar",
+        "paragraphs": [
+          "No Hairdresser, acreditamos que cada cacho é uma impressão digital única. Nossa missão transcende a estética; buscamos a saúde profunda da fibra capilar.",
+          "Abandonamos processos agressivos para abraçar a individualidade de cada curvatura. Do 2A ao 4C, cada tratamento é um momento de reconexão com sua identidade original."
+        ],
+        "historyLinkLabel": "NOSSA HISTÓRIA"
+      },
+      "services": {
+        "eyebrow": "A Experiência",
+        "title": "Nossas Especialidades",
+        "items": [
+          {
+            "icon": "cut",
+            "title": "Corte de Fluxo",
+            "desc": "Especializado em cabelos secos para respeitar o encolhimento e o caimento natural dos fios.",
+            "price": "A PARTIR DE R$ 180"
+          },
+          {
+            "icon": "drop",
+            "title": "Infusão Profunda",
+            "desc": "Tratamento de lipídios e proteínas que penetram na cutícula para brilho e resiliência extrema.",
+            "price": "A PARTIR DE R$ 220"
+          },
+          {
+            "icon": "flare",
+            "title": "Bio Definição",
+            "desc": "Técnicas de finalização personalizadas que garantem cachos definidos por dias, sem rigidez.",
+            "price": "A PARTIR DE R$ 120"
+          },
+          {
+            "icon": "eco",
+            "title": "Detox Quelante",
+            "desc": "Remoção de resíduos metálicos e poluição do couro cabeludo, oxigenando o folículo.",
+            "price": "A PARTIR DE R$ 150"
+          }
+        ]
+      },
+      "gallery": {
+        "eyebrow": "Galeria",
+        "title": "Visual Journal",
+        "instagramLabel": "Ver Instagram",
+        "items": [
+          {
+            "src": "/clients/hairdresser/images/gallery-02.jpg",
+            "alt": "Coleção de texturas de cachos",
+            "span": "large"
+          },
+          {
+            "src": "/clients/hairdresser/images/gallery-03.jpg",
+            "alt": "Ondas 2C com balayage",
+            "span": "small"
+          },
+          {
+            "src": "/clients/hairdresser/images/gallery-04.jpg",
+            "alt": "Afro puff 4C",
+            "span": "tall"
+          },
+          {
+            "src": "/clients/hairdresser/images/gallery-05.jpg",
+            "alt": "Cachos 3B espirais",
+            "span": "small"
+          }
+        ]
+      },
+      "testimonials": {
+        "eyebrow": "Vozes da Comunidade",
+        "items": [
+          {
+            "quote": "Encontrar a Rayssa foi o início da minha jornada de autoaceitação. Hoje eu não apenas uso meu cabelo natural, eu o celebro todos os dias.",
+            "author": "Mariana Santos, Cliente desde 2021"
+          }
+        ]
+      },
+      "newsletter": {
+        "title": "Mantenha seus Cachos Vibrantes",
+        "subtitle": "Assine nossa curadoria mensal com dicas de cuidados em casa e lançamentos exclusivos.",
+        "placeholder": "SEU MELHOR E-MAIL",
+        "buttonLabel": "Inscrever"
+      }
+    },
+    "blog": {
+      "enabled": true
+    },
+    "linktree": {
+      "links": [
+        {
+          "label": "Agendar",
+          "url": "#agendar",
+          "icon": "calendar"
+        },
+        {
+          "label": "Instagram",
+          "url": "https://instagram.com/",
+          "icon": "instagram"
+        },
+        {
+          "label": "WhatsApp",
+          "url": "https://wa.me/",
+          "icon": "whatsapp"
+        }
+      ]
+    }
+  }
+}
