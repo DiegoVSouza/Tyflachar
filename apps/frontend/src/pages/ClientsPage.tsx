@@ -36,8 +36,8 @@ export function ClientsPage(): React.ReactElement {
     <div className={styles.page}>
       <header className={styles.pageHeader}>
         <div>
-          <h1 className={styles.title}>Clients</h1>
-          <p className={styles.subtitle}>Clients captured via WhatsApp</p>
+          <h1 className={styles.title}>Clientes</h1>
+          <p className={styles.subtitle}>Clientes capturados via WhatsApp</p>
         </div>
       </header>
 

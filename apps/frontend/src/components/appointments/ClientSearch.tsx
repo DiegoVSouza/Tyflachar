@@ -64,22 +64,22 @@ export function ClientSearch({ onSelect, value }: Props): React.ReactElement {
           id="client-search"
           type="text"
           className={styles.input}
-          placeholder="Search by name or phone"
+          placeholder="Digite o nome ou telefone do cliente"
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
             if (value) onSelect(null as unknown as Cliente);
           }}
           autoComplete="off"
-          aria-label="Search client"
+          aria-label="Buscar cliente"
           aria-owns={isOpen ? 'client-search-dropdown' : undefined}
           aria-autocomplete="list"
         />
-        {loading && <span className={styles.spinner} aria-label="Searching" />}
+        {loading && <span className={styles.spinner} aria-label="Buscando" />}
       </div>
 
       {isOpen && results.length > 0 && (
-        <ul id="client-search-dropdown" className={styles.dropdown} role="listbox" aria-label="Search results">
+        <ul id="client-search-dropdown" className={styles.dropdown} role="listbox" aria-label="Resultados da busca">
           {results.map((c) => (
             <li
               key={c.id}
@@ -98,7 +98,7 @@ export function ClientSearch({ onSelect, value }: Props): React.ReactElement {
       )}
 
       {isOpen && results.length === 0 && !loading && (
-        <div className={styles.empty}>No clients found.</div>
+        <div className={styles.empty}>Nenhum cliente encontrado.</div>
       )}
     </div>
   );

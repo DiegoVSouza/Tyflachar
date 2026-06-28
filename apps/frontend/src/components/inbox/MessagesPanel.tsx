@@ -37,9 +37,9 @@ export function MessagesPanel({ conversation, messages, isLoading, onSend }: Pro
       </header>
 
       <div className={styles.messages} aria-label="Message history" role="log">
-        {isLoading && <p className={styles.state}>Loading messages…</p>}
+        {isLoading && <p className={styles.state}>Carregando mensagens...</p>}
         {!isLoading && messages.length === 0 && (
-          <p className={styles.state}>No messages yet.</p>
+          <p className={styles.state}>Nenhuma mensagem ainda.</p>
         )}
         {messages.map((m) => (
           <MessageBubble key={m.id} message={m} />

@@ -67,7 +67,7 @@ export function ClientDrawer({
     <>
       <div className={styles.overlay} onClick={onClose} aria-hidden="true" />
 
-      <aside className={styles.drawer} aria-label={`Details for ${client.nome}`}>
+      <aside className={styles.drawer} aria-label={`Detalhes do cliente ${client.nome}`}>
         <header className={styles.header}>
           <div className={styles.avatar} aria-hidden="true">
             {client.nome[0]?.toUpperCase()}
@@ -80,7 +80,7 @@ export function ClientDrawer({
             id="btn-close-drawer"
             className={styles.btnClose}
             onClick={onClose}
-            aria-label="Close panel"
+            aria-label="Fechar painel"
           >
             ✕
           </button>
@@ -88,9 +88,9 @@ export function ClientDrawer({
 
         <div className={styles.body}>
           <section className={styles.section}>
-            <h3 className={styles.sectionTitle}>Details</h3>
+            <h3 className={styles.sectionTitle}>Detalhes</h3>
             <div className={styles.field}>
-              <span className={styles.fieldLabel}>Registered</span>
+              <span className={styles.fieldLabel}>Registrado</span>
               <span className={styles.fieldValue}>{formatDate(client.criadoEm)}</span>
             </div>
             <div className={styles.field}>
@@ -102,7 +102,7 @@ export function ClientDrawer({
           <section className={styles.section}>
             <h3 className={styles.sectionTitle}>
               Tags
-              {savingTags && <span className={styles.saving}> (saving…)</span>}
+              {savingTags && <span className={styles.saving}> (salvando…)</span>}
             </h3>
             <InputTags
               tags={tags}
@@ -118,18 +118,18 @@ export function ClientDrawer({
                 className={styles.btnConversation}
                 onClick={goToConversation}
               >
-                💬 Open in inbox
+                💬 Abrir conversa
               </button>
             </section>
           )}
 
           <section className={styles.section}>
-            <h3 className={styles.sectionTitle}>Appointments</h3>
+            <h3 className={styles.sectionTitle}>Agendamentos</h3>
             {loadingAppointments && (
-              <p className={styles.state}>Loading…</p>
+              <p className={styles.state}>Carregando…</p>
             )}
             {!loadingAppointments && appointments.length === 0 && (
-              <p className={styles.state}>No appointments recorded.</p>
+              <p className={styles.state}>Nenhum agendamento.</p>
             )}
             {!loadingAppointments && appointments.length > 0 && (
               <ul className={styles.apptList}>

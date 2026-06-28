@@ -89,12 +89,12 @@ export function NewAppointmentModal({ isOpen, onClose, onSave }: Props): React.R
     >
       <div className={styles.modal}>
         <header className={styles.header}>
-          <h2 id="modal-title" className={styles.title}>New Appointment</h2>
+          <h2 id="modal-title" className={styles.title}>Novo agendamento</h2>
           <button
             id="btn-close-modal"
             className={styles.btnClose}
             onClick={onClose}
-            aria-label="Close modal"
+            aria-label="Fechar modal"
           >
             ✕
           </button>
@@ -103,7 +103,7 @@ export function NewAppointmentModal({ isOpen, onClose, onSave }: Props): React.R
         <form id="form-new-appointment" onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.field}>
             <label className={styles.label} htmlFor="client-search">
-              Client <span aria-hidden="true">*</span>
+              Cliente <span aria-hidden="true">*</span>
             </label>
             <ClientSearch
               value={form.client}
@@ -113,7 +113,7 @@ export function NewAppointmentModal({ isOpen, onClose, onSave }: Props): React.R
 
           <div className={styles.field}>
             <label className={styles.label} htmlFor="select-service">
-              Service <span aria-hidden="true">*</span>
+              Serviço <span aria-hidden="true">*</span>
             </label>
             <select
               id="select-service"
@@ -122,7 +122,7 @@ export function NewAppointmentModal({ isOpen, onClose, onSave }: Props): React.R
               onChange={(e) => setForm((f) => ({ ...f, service: e.target.value }))}
               required
             >
-              <option value="">Select a service…</option>
+              <option value="">Selecione um serviço…</option>
               {SERVICES.map((s) => (
                 <option key={s} value={s}>{s}</option>
               ))}
@@ -132,7 +132,7 @@ export function NewAppointmentModal({ isOpen, onClose, onSave }: Props): React.R
           <div className={styles.row}>
             <div className={styles.field}>
               <label className={styles.label} htmlFor="input-date">
-                Date <span aria-hidden="true">*</span>
+                Data <span aria-hidden="true">*</span>
               </label>
               <input
                 id="input-date"
@@ -147,7 +147,7 @@ export function NewAppointmentModal({ isOpen, onClose, onSave }: Props): React.R
 
             <div className={styles.field}>
               <label className={styles.label} htmlFor="input-time">
-                Time <span aria-hidden="true">*</span>
+                Horário <span aria-hidden="true">*</span>
               </label>
               <input
                 id="input-time"
@@ -172,7 +172,7 @@ export function NewAppointmentModal({ isOpen, onClose, onSave }: Props): React.R
             className={styles.btnCancel}
             onClick={onClose}
           >
-            Cancel
+            Cancelar
           </button>
           <button
             id="btn-save-appointment"
@@ -181,7 +181,7 @@ export function NewAppointmentModal({ isOpen, onClose, onSave }: Props): React.R
             className={styles.btnSave}
             disabled={!isValid || saving}
           >
-            {saving ? 'Saving…' : 'Save'}
+            {saving ? 'Salvando…' : 'Salvar'}
           </button>
         </footer>
       </div>

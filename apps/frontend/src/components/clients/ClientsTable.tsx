@@ -38,35 +38,35 @@ export function ClientsTable({
             id="input-search-clients"
             type="search"
             className={styles.searchInput}
-            placeholder="Search by name or phone…"
+            placeholder="Pesquisar por nome ou telefone…"
             value={query}
             onChange={(e) => onSearch(e.target.value)}
-            aria-label="Search clients"
+            aria-label="Pesquisar clientes"
           />
         </div>
         <span className={styles.total}>
-          {isLoading ? '…' : `${total} client${total !== 1 ? 's' : ''}`}
+          {isLoading ? '…' : `${total} cliente${total !== 1 ? 's' : ''}`}
         </span>
       </div>
 
       {isLoading ? (
         <div className={styles.state} role="status" aria-live="polite">
           <span className={styles.spinner} aria-hidden="true" />
-          Loading clients…
+          Carregando clientes…
         </div>
       ) : clients.length === 0 ? (
         <div className={styles.state} role="status">
           <span className={styles.emptyIcon} aria-hidden="true">👤</span>
-          <p>{query ? 'No clients found for this search.' : 'No clients registered yet.'}</p>
+          <p>{query ? 'Nenhum cliente encontrado.' : 'Nenhum cliente cadastrado ainda.'}</p>
         </div>
       ) : (
-        <div className={styles.tableWrapper} role="region" aria-label="Clients list">
+        <div className={styles.tableWrapper} role="region" aria-label="Lista de clientes">
           <table className={styles.table}>
             <thead className={styles.thead}>
               <tr>
-                <th scope="col" className={styles.th}>Client</th>
-                <th scope="col" className={styles.th}>Phone</th>
-                <th scope="col" className={styles.th}>Registered</th>
+                <th scope="col" className={styles.th}>Cliente</th>
+                <th scope="col" className={styles.th}>Telefone</th>
+                <th scope="col" className={styles.th}>Registrado</th>
                 <th scope="col" className={styles.th}>Tags</th>
               </tr>
             </thead>

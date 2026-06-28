@@ -31,7 +31,7 @@ export function AppointmentsTable({ appointments, isLoading, onUpdateStatus }: P
     return (
       <div className={styles.state} role="status" aria-live="polite">
         <span className={styles.spinner} aria-hidden="true" />
-        Loading appointments…
+        Carregando agendamentos…
       </div>
     );
   }
@@ -40,7 +40,7 @@ export function AppointmentsTable({ appointments, isLoading, onUpdateStatus }: P
     return (
       <div className={styles.state} role="status">
         <span className={styles.emptyIcon} aria-hidden="true">📅</span>
-        <p>No appointments found.</p>
+        <p>Nenhum agendamento encontrado.</p>
       </div>
     );
   }
@@ -50,11 +50,11 @@ export function AppointmentsTable({ appointments, isLoading, onUpdateStatus }: P
       <table className={styles.table}>
         <thead className={styles.thead}>
           <tr>
-            <th scope="col" className={styles.th}>Client</th>
-            <th scope="col" className={styles.th}>Service</th>
-            <th scope="col" className={styles.th}>Date & Time</th>
+            <th scope="col" className={styles.th}>Cliente</th>
+            <th scope="col" className={styles.th}>Serviço</th>
+            <th scope="col" className={styles.th}>Data e Hora</th>
             <th scope="col" className={styles.th}>Status</th>
-            <th scope="col" className={styles.th}>Actions</th>
+            <th scope="col" className={styles.th}>Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -82,9 +82,9 @@ export function AppointmentsTable({ appointments, isLoading, onUpdateStatus }: P
                         id={`btn-status-${appt.id}-${newStatus}`}
                         className={`${styles.btnAction} ${styles[newStatus]}`}
                         onClick={() => onUpdateStatus(appt.id, { status: newStatus })}
-                        title={`Mark as ${newStatus}`}
+                        title={`Marcar como ${newStatus}`}
                       >
-                        {newStatus === 'confirmado' ? '✅ Confirm' : '✕ Cancel'}
+                        {newStatus === 'confirmado' ? '✅ Confirmar' : '✕ Cancelar'}
                       </button>
                     ))}
                     {next.length === 0 && (

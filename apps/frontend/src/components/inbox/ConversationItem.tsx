@@ -24,7 +24,7 @@ export function ConversationItem({ conversation, isSelected, onClick }: Props): 
       className={`${styles.item} ${isSelected ? styles.selected : ''}`}
       onClick={onClick}
       aria-pressed={isSelected}
-      aria-label={`Conversation with ${conversation.clienteNome}, ${conversation.naoLidas} unread`}
+      aria-label={`Conversa com ${conversation.clienteNome}, ${conversation.naoLidas} não lidas`}
     >
       <div className={styles.avatar} aria-hidden="true">
         {conversation.clienteNome[0]?.toUpperCase()}
@@ -39,7 +39,7 @@ export function ConversationItem({ conversation, isSelected, onClick }: Props): 
         <div className={styles.bottomRow}>
           <p className={styles.preview}>{conversation.ultimaMensagem}</p>
           {conversation.naoLidas > 0 && (
-            <span className={styles.badge} aria-label={`${conversation.naoLidas} unread`}>
+            <span className={styles.badge} aria-label={`${conversation.naoLidas} não lidas`}>
               {conversation.naoLidas}
             </span>
           )}

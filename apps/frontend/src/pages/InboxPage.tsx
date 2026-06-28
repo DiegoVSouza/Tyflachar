@@ -32,11 +32,11 @@ export function InboxPage(): React.ReactElement {
     <div className={styles.inbox}>
       <aside className={styles.sidebar}>
         <header className={styles.sidebarHeader}>
-          <h2 className={styles.sidebarTitle}>Conversations</h2>
+          <h2 className={styles.sidebarTitle}>Conversas</h2>
           <span className={styles.count}>{conversations.length}</span>
         </header>
 
-        <div className={styles.filters} role="group" aria-label="Filter conversations">
+        <div className={styles.filters} role="group" aria-label="Filtro de conversas">
           {FILTERS.map((f) => (
             <button
               key={f.value}
@@ -68,8 +68,8 @@ export function InboxPage(): React.ReactElement {
         ) : (
           <div className={styles.empty} role="status">
             <span className={styles.emptyIcon} aria-hidden="true">💬</span>
-            <p className={styles.emptyTitle}>Select a conversation</p>
-            <p className={styles.emptySubtitle}>Choose a conversation on the left to view messages.</p>
+            <p className={styles.emptyTitle}>Selecionar conversa</p>
+            <p className={styles.emptySubtitle}>Escolha uma conversa para ver as mensagens.</p>
           </div>
         )}
       </main>

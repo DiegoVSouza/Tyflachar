@@ -31,7 +31,7 @@ export function ConversationList({
 
   return (
     <div className={styles.panel}>
-      <div className={styles.filters} role="tablist" aria-label="Conversation filters">
+      <div className={styles.filters} role="tablist" aria-label="Filtros de conversa">
         {FILTERS.map((f) => (
           <button
             key={f.key}
@@ -46,12 +46,12 @@ export function ConversationList({
         ))}
       </div>
 
-      <div className={styles.list} role="list" aria-label="Conversations">
+      <div className={styles.list} role="list" aria-label="Conversas">
         {isLoading && (
-          <p className={styles.state}>Loading conversations…</p>
+          <p className={styles.state}>Carregando conversas...</p>
         )}
         {!isLoading && filtered.length === 0 && (
-          <p className={styles.state}>No conversations found.</p>
+          <p className={styles.state}>Nenhuma conversa encontrada.</p>
         )}
         {filtered.map((conv) => (
           <ConversationItem

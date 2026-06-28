@@ -17,9 +17,9 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { to: '/dashboard/inbox', label: 'Conversations', icon: '💬' },
-  { to: '/dashboard/appointments', label: 'Appointments', icon: '📅' },
-  { to: '/dashboard/clients', label: 'Clients', icon: '👤' },
+  { to: '/dashboard/inbox', label: 'Conversas', icon: '💬' },
+  { to: '/dashboard/appointments', label: 'Agenda', icon: '📅' },
+  { to: '/dashboard/clients', label: 'Clientes', icon: '👤' },
 ];
 
 export function DashboardLayout(): React.ReactElement {
@@ -80,7 +80,7 @@ export function DashboardLayout(): React.ReactElement {
         <header className={styles.topbar}>
           <div className={styles.topbarLeft}>
             <span className={styles.greeting}>
-              Hi, <strong>{user?.name ?? 'there'}</strong> 👋
+              Oi, <strong>{user?.name ?? 'seja bem-vindo'}</strong> 👋
             </span>
           </div>
           <div className={styles.topbarRight}>
@@ -88,9 +88,9 @@ export function DashboardLayout(): React.ReactElement {
               id="btn-logout"
               className={styles.btnLogout}
               onClick={handleLogout}
-              title="Sign out"
+              title="Sair"
             >
-              Sign out →
+              Sair →
             </button>
           </div>
         </header>

@@ -27,7 +27,7 @@ export function MessageInput({ onSend, disabled = false }: Props): React.ReactEl
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit} aria-label="Send message">
+    <form className={styles.form} onSubmit={handleSubmit} aria-label="Enviar mensagem">
       <textarea
         id="input-message"
         ref={textareaRef}
@@ -35,17 +35,17 @@ export function MessageInput({ onSend, disabled = false }: Props): React.ReactEl
         value={text}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="Type a message… (Enter to send)"
+        placeholder="Digite uma mensagem… (Enter para enviar)"
         disabled={disabled}
         rows={1}
-        aria-label="Message text"
+        aria-label="Texto da mensagem"
       />
       <button
         id="btn-send"
         type="submit"
         className={styles.btnSend}
         disabled={disabled || !text.trim()}
-        aria-label="Send message"
+        aria-label="Enviar mensagem"
       >
         ➤
       </button>

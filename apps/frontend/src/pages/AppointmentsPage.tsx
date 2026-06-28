@@ -30,21 +30,21 @@ export function AppointmentsPage(): React.ReactElement {
     <div className={styles.page}>
       <header className={styles.pageHeader}>
         <div>
-          <h1 className={styles.title}>Appointments</h1>
-          <p className={styles.subtitle}>Manage the salon schedule</p>
+          <h1 className={styles.title}>Agendamentos</h1>
+          <p className={styles.subtitle}>Gerencie a agenda do seu negocio</p>
         </div>
         <button
           id="btn-new-appointment"
           className={styles.btnNew}
           onClick={() => setModalOpen(true)}
         >
-          + New appointment
+          + Nobo agendamento
         </button>
       </header>
 
       <div className={styles.filters} role="group" aria-label="Appointment filters">
         <div className={styles.filterGroup}>
-          <span className={styles.filterLabel}>Period:</span>
+          <span className={styles.filterLabel}>Periodo:</span>
           {(['', 'hoje', 'semana', 'mes'] as PeriodFilter[]).map((p) => (
             <button
               key={p || 'all'}
@@ -52,7 +52,7 @@ export function AppointmentsPage(): React.ReactElement {
               className={`${styles.filterBtn} ${period === p ? styles.filterActive : ''}`}
               onClick={() => setPeriod(p)}
             >
-              {p === '' ? 'All' : p === 'hoje' ? 'Today' : p === 'semana' ? 'This week' : 'This month'}
+              {p === '' ? 'Todos' : p === 'hoje' ? 'Hoje' : p === 'semana' ? 'Esta semana' : 'Este mes'}
             </button>
           ))}
         </div>
@@ -66,7 +66,7 @@ export function AppointmentsPage(): React.ReactElement {
               className={`${styles.filterBtn} ${statusFilter === s ? styles.filterActive : ''}`}
               onClick={() => setStatusFilter(s)}
             >
-              {s === '' ? 'All' : s.charAt(0).toUpperCase() + s.slice(1)}
+              {s === '' ? 'Todos' : s.charAt(0).toUpperCase() + s.slice(1)}
             </button>
           ))}
         </div>

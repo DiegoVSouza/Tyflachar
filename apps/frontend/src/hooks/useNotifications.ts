@@ -40,7 +40,7 @@ export function useNotifications() {
       if (conversaId === selectedConversationId) return;
 
       const conversation = conversations.find((c) => c.id === conversaId);
-      const clientName = conversation?.clienteNome ?? 'Client';
+      const clientName = conversation?.clienteNome ?? 'Cliente';
 
       const id = ++toastIdCounter;
       const newToast: ToastItem = {
