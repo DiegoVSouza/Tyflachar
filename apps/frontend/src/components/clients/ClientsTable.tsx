@@ -1,15 +1,15 @@
 import React from 'react';
-import type { Cliente, ClienteId } from 'types';
+import type { Cliente, client_id } from 'types';
 import styles from './ClientsTable.module.css';
 
 interface Props {
   clients: Cliente[];
   total: number;
   isLoading: boolean;
-  selectedClientId: ClienteId | null;
+  selectedClientId: client_id | null;
   query: string;
   onSearch: (q: string) => void;
-  onSelect: (id: ClienteId) => void;
+  onSelect: (id: client_id) => void;
 }
 
 function formatDate(iso: string): string {

@@ -22,11 +22,11 @@ export function MessagesPanel({ conversation, messages, isLoading, onSend }: Pro
     <div className={styles.panel}>
       <header className={styles.header}>
         <div className={styles.avatar} aria-hidden="true">
-          {conversation.clienteNome[0]?.toUpperCase()}
+          {conversation.client_name[0]?.toUpperCase()}
         </div>
         <div>
-          <p className={styles.name}>{conversation.clienteNome}</p>
-          <p className={styles.phone}>{conversation.clienteTelefone}</p>
+          <p className={styles.name}>{conversation.client_name}</p>
+          <p className={styles.phone}>{conversation.client_phone}</p>
         </div>
         <span
           className={`${styles.statusBadge} ${styles[conversation.status]}`}

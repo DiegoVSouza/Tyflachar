@@ -41,6 +41,7 @@ export default function App(): React.ReactElement {
               <Route path="/:clientSlug/blog" element={<ClientPage page="blog" />} />
               <Route path="/:clientSlug/links" element={<ClientPage page="linktree" />} />
 
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/login" element={<LoginPage />} />
 
               <Route element={<ProtectedRoute />}>

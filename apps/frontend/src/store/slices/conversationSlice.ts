@@ -16,7 +16,7 @@ interface ConversationState {
   status: LoadStatus;
   mensagensStatus: LoadStatus;
   error: string | null;
-  totalNaoLidas: number;
+  totalunread: number;
 }
 
 const initialState: ConversationState = {
@@ -26,7 +26,7 @@ const initialState: ConversationState = {
   status: 'idle',
   mensagensStatus: 'idle',
   error: null,
-  totalNaoLidas: 0,
+  totalunread: 0,
 };
 
 export const fetchConversas = createAsyncThunk(
@@ -75,28 +75,28 @@ const conversationSlice = createSlice({
       state.conversaSelecionadaId = action.payload;
       if (action.payload) {
         const conv = state.conversas.find((c) => c.id === action.payload);
-        if (conv) conv.naoLidas = 0;
+        if (conv) conv.unread = 0;
       }
-      state.totalNaoLidas = state.conversas.reduce((sum, c) => sum + c.naoLidas, 0);
+      state.totalunread = state.conversas.reduce((sum, c) => sum + c.unread, 0);
     },
 
     receberMensagem(state, action: PayloadAction<{ conversaId: ConversaId; mensagem: Mensagem }>) {
       const { conversaId, mensagem } = action.payload;
       const conv = state.conversas.find((c) => c.id === conversaId);
       if (conv) {
-        conv.ultimaMensagem = mensagem.conteudo;
-        conv.ultimaMensagemEm = mensagem.criadaEm;
+        conv.last_message = mensagem.conteudo;
+        conv.last_message_at = mensagem.criadaEm;
         if (state.conversaSelecionadaId !== conversaId) {
-          conv.naoLidas += 1;
+          conv.unread += 1;
         }
       }
       if (state.mensagens[conversaId]) {
         state.mensagens[conversaId].push(mensagem);
       }
       state.conversas.sort(
-        (a, b) => new Date(b.ultimaMensagemEm).getTime() - new Date(a.ultimaMensagemEm).getTime()
+        (a, b) => new Date(b.last_message_at).getTime() - new Date(a.last_message_at).getTime()
       );
-      state.totalNaoLidas = state.conversas.reduce((sum, c) => sum + c.naoLidas, 0);
+      state.totalunread = state.conversas.reduce((sum, c) => sum + c.unread, 0);
     },
 
     clearConversationError(state) {
@@ -112,7 +112,7 @@ const conversationSlice = createSlice({
       .addCase(fetchConversas.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.conversas = action.payload;
-        state.totalNaoLidas = action.payload.reduce((sum, c) => sum + c.naoLidas, 0);
+        state.totalunread = action.payload.reduce((sum, c) => sum + c.unread, 0);
       })
       .addCase(fetchConversas.rejected, (state, action) => {
         state.status = 'failed';
@@ -150,7 +150,7 @@ export const selectMensagens = (conversaId: ConversaId) => (state: RootState) =>
 export const selectConversaStatus = (state: RootState) => state.conversation.status;
 export const selectMensagensStatus = (state: RootState) => state.conversation.mensagensStatus;
 export const selectConversaError = (state: RootState) => state.conversation.error;
-export const selectTotalNaoLidas = (state: RootState) => state.conversation.totalNaoLidas;
+export const selectTotalunread = (state: RootState) => state.conversation.totalunread;
 export const selectConversaSelecionadaId = (state: RootState) =>
   state.conversation.conversaSelecionadaId;
 

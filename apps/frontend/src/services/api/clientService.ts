@@ -2,7 +2,7 @@ import apiClient from './apiClient';
 import { buildUrl } from '../utils/buildUrl';
 import type {
   Cliente,
-  ClienteId,
+  client_id,
   AtualizarClienteInput,
   PaginatedResponse,
   Agendamento,
@@ -22,12 +22,12 @@ export const clientService = {
     return apiClient.get<PaginatedResponse<Cliente>>(url);
   },
 
-  getById: (id: ClienteId) =>
+  getById: (id: client_id) =>
     apiClient.get<Cliente>(`${BASE}/${id}`),
 
-  getAppointments: (id: ClienteId) =>
+  getAppointments: (id: client_id) =>
     apiClient.get<Agendamento[]>(`${BASE}/${id}/appointments`),
 
-  update: (id: ClienteId, data: AtualizarClienteInput) =>
+  update: (id: client_id, data: AtualizarClienteInput) =>
     apiClient.patch<Cliente>(`${BASE}/${id}/tags`, data),
 };

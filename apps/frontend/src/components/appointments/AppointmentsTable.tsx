@@ -63,7 +63,7 @@ export function AppointmentsTable({ appointments, isLoading, onUpdateStatus }: P
             return (
               <tr key={appt.id} className={styles.tr}>
                 <td className={styles.td}>
-                  <span className={styles.name}>{appt.clienteNome}</span>
+                  <span className={styles.name}>{appt.client_name}</span>
                 </td>
                 <td className={styles.td}>
                   <span className={styles.service}>{appt.servico}</span>

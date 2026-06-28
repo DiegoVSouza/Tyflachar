@@ -14,7 +14,7 @@ import {
   selectConversaStatus,
   selectMensagensStatus,
   selectConversaError,
-  selectTotalNaoLidas,
+  selectTotalunread,
 } from 'store/slices/conversationSlice';
 import type { ListConversationsFilters } from 'services/api/conversationService';
 
@@ -27,7 +27,7 @@ export function useConversations(filters: ListConversationsFilters = {}) {
   const status = useSelector(selectConversaStatus);
   const messagesStatus = useSelector(selectMensagensStatus);
   const error = useSelector(selectConversaError);
-  const totalUnread = useSelector(selectTotalNaoLidas);
+  const totalUnread = useSelector(selectTotalunread);
 
   const messages = useSelector(
     selectedConversationId ? selectMensagens(selectedConversationId) : () => []

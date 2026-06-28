@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { Cliente, CriarAgendamentoInput, ClienteId } from 'types';
+import type { Cliente, CriarAgendamentoInput, client_id } from 'types';
 import { ClientSearch } from './ClientSearch';
 import styles from './NewAppointmentModal.module.css';
 
@@ -67,7 +67,7 @@ export function NewAppointmentModal({ isOpen, onClose, onSave }: Props): React.R
     try {
       const dateTime = new Date(`${form.date}T${form.time}`).toISOString();
       await onSave({
-        clienteId: form.client.id as ClienteId,
+        client_id: form.client.id as client_id,
         servico: form.service,
         dataHora: dateTime,
       });

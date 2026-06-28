@@ -95,7 +95,6 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 	}
 
 	user, err := h.repo.FindUserByEmail(req.Email)
-
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "invalid credentials"})
 	}

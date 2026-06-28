@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from 'store';
 import { selecionarConversa } from 'store/slices/conversationSlice';
-import type { Cliente, Agendamento, ClienteId } from 'types';
+import type { Cliente, Agendamento, client_id } from 'types';
 import { StatusBadge } from 'components/appointments/StatusBadge';
 import { InputTags } from './InputTags';
 import styles from './ClientDrawer.module.css';
@@ -13,7 +13,7 @@ interface Props {
   appointments: Agendamento[];
   loadingAppointments: boolean;
   onClose: () => void;
-  onUpdateTags: (id: ClienteId, tags: string[]) => void;
+  onUpdateTags: (id: client_id, tags: string[]) => void;
 }
 
 function formatDate(iso: string): string {

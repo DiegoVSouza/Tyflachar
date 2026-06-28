@@ -3,10 +3,11 @@ package handlers
 import (
 	"strconv"
 
-	"github.com/gofiber/fiber/v2"
 	"crm-whatsapp-api/internal/models"
 	"crm-whatsapp-api/internal/repository"
 	"crm-whatsapp-api/internal/ws"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 type ConversationHandler struct {

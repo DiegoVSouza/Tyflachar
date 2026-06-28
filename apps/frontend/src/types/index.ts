@@ -91,10 +91,10 @@ export type LoadStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
 
 // ─── CRM — Branded IDs ────────────────────────────────────────────────────────
 
-export type ConversaId  = Brand<string, 'ConversaId'>;
-export type MensagemId  = Brand<string, 'MensagemId'>;
+export type ConversaId = Brand<string, 'ConversaId'>;
+export type MensagemId = Brand<string, 'MensagemId'>;
 export type AgendamentoId = Brand<string, 'AgendamentoId'>;
-export type ClienteId   = Brand<string, 'ClienteId'>;
+export type client_id = Brand<string, 'client_id'>;
 
 // ─── CRM — Conversa ───────────────────────────────────────────────────────────
 
@@ -102,12 +102,12 @@ export type ConversaStatus = 'aberta' | 'aguardando' | 'fechada';
 
 export interface Conversa {
   id: ConversaId;
-  clienteId: ClienteId;
-  clienteNome: string;
-  clienteTelefone: string;
-  ultimaMensagem: string;
-  ultimaMensagemEm: string; // ISO 8601
-  naoLidas: number;
+  client_id: client_id;
+  client_name: string;
+  client_phone: string;
+  last_message: string;
+  last_message_at: string; // ISO 8601
+  unread: number;
   status: ConversaStatus;
 }
 
@@ -129,15 +129,15 @@ export type AgendamentoStatus = 'pendente' | 'confirmado' | 'cancelado';
 
 export interface Agendamento {
   id: AgendamentoId;
-  clienteId: ClienteId;
-  clienteNome: string;
+  client_id: client_id;
+  client_name: string;
   servico: string;
   dataHora: string; // ISO 8601
   status: AgendamentoStatus;
 }
 
 export interface CriarAgendamentoInput {
-  clienteId: ClienteId;
+  client_id: client_id;
   servico: string;
   dataHora: string;
 }
@@ -151,7 +151,7 @@ export interface AtualizarAgendamentoInput {
 // ─── CRM — Cliente ────────────────────────────────────────────────────────────
 
 export interface Cliente {
-  id: ClienteId;
+  id: client_id;
   nome: string;
   telefone: string;
   criadoEm: string; // ISO 8601

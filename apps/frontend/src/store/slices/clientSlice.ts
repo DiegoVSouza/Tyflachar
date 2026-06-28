@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { clientService, type ListClientsFilters } from 'services/api/clientService';
 import type {
   Cliente,
-  ClienteId,
+  client_id,
   AtualizarClienteInput,
   Agendamento,
   LoadStatus,
@@ -12,7 +12,7 @@ import type { RootState } from '../index';
 interface ClientState {
   clientes: Cliente[];
   total: number;
-  clienteSelecionadoId: ClienteId | null;
+  clienteSelecionadoId: client_id | null;
   agendamentosDoCliente: Agendamento[];
   status: LoadStatus;
   detalhesStatus: LoadStatus;
@@ -42,7 +42,7 @@ export const fetchClientes = createAsyncThunk(
 
 export const fetchAgendamentosDoCliente = createAsyncThunk(
   'client/fetchClientAppointments',
-  async (id: ClienteId, { rejectWithValue }) => {
+  async (id: client_id, { rejectWithValue }) => {
     try {
       return await clientService.getAppointments(id);
     } catch (error) {
@@ -54,7 +54,7 @@ export const fetchAgendamentosDoCliente = createAsyncThunk(
 export const atualizarTagsCliente = createAsyncThunk(
   'client/updateTags',
   async (
-    { id, data }: { id: ClienteId; data: AtualizarClienteInput },
+    { id, data }: { id: client_id; data: AtualizarClienteInput },
     { rejectWithValue }
   ) => {
     try {
@@ -69,7 +69,7 @@ const clientSlice = createSlice({
   name: 'client',
   initialState,
   reducers: {
-    selecionarCliente(state, action: { payload: ClienteId | null }) {
+    selecionarCliente(state, action: { payload: client_id | null }) {
       state.clienteSelecionadoId = action.payload;
       if (!action.payload) state.agendamentosDoCliente = [];
     },

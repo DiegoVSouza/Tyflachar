@@ -18,12 +18,13 @@ SELECT setval(pg_get_serial_sequence('branches', 'id'), 1);
 -- ─── Dashboard user ───────────────────────────────────────────────────────────
 -- Password: "admin123" — Argon2id (m=65536 KB, t=3, p=4)
 -- To regenerate: go run scripts/genhash/main.go <new-password>
-INSERT INTO dashboard_users (branch_id, email, password_hash, role)
+INSERT INTO dashboard_users (branch_id, email, password_hash, role, name)
 VALUES (
     1,
     'admin@test.com',
     '$argon2id$v=19$m=65536,t=3,p=4$hUGtHQ+ETAReBjpAD3kCNA$8FmYYHTeBejng1WanfJ3sJwwTgSoZxXQuxiHnCtWNas',
-    'admin'
+    'admin',
+    'Test Admin'
 );
 
 -- ─── Services ─────────────────────────────────────────────────────────────────
