@@ -6,6 +6,7 @@ type User struct {
 	ID           int       `json:"id"`
 	BranchID     int       `json:"branch_id"`
 	Email        string    `json:"email"`
+	Name         string    `json:"name"`
 	PasswordHash string    `json:"-"`
 	Role         string    `json:"role"`
 	CreatedAt    time.Time `json:"created_at"`

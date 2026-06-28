@@ -63,11 +63,11 @@ func (e *Engine) sendMainMenu(conv *models.Conversation, msg IncomingMessage) er
 	conv.BotState = StateMainMenu
 	return e.wa.SendButtons(
 		msg.From,
-		"Hi! 👋 I'm the virtual assistant. How can I help you today?",
+		"Olá! 👋 Sou o assistente virtual. Como posso te ajudar hoje?",
 		[]whatsapp.ButtonOption{
-			{ID: BtnSchedule, Title: "Schedule appointment"},
-			{ID: BtnViewSlots, Title: "View availability"},
-			{ID: BtnTalkToAgent, Title: "Talk to staff"},
+			{ID: BtnSchedule, Title: "Agendar horário"},
+			{ID: BtnViewSlots, Title: "Ver disponibilidade"},
+			{ID: BtnTalkToAgent, Title: "Falar com atendente"},
 		},
 	)
 }
@@ -81,18 +81,18 @@ func (e *Engine) handleMainMenu(conv *models.Conversation, msg IncomingMessage) 
 	case BtnViewSlots:
 		slots, err := e.repo.ListAvailableSlots(conv.BranchID, PeriodMorning)
 		if err != nil || len(slots) == 0 {
-			return e.wa.SendText(msg.From, "No available slots at the moment, please try again later.")
+			return e.wa.SendText(msg.From, "Não há horários disponíveis no momento. Tente novamente mais tarde.")
 		}
-		text := "Next available slots:\n"
+		text := "Próximos horários disponíveis:\n"
 		for _, s := range slots {
-			text += fmt.Sprintf("- %s\n", s.ScheduledAt.Format("01/02 15:04"))
+			text += fmt.Sprintf("- %s\n", s.ScheduledAt.Format("02/01 15:04"))
 		}
 		return e.wa.SendText(msg.From, text)
 
 	case BtnTalkToAgent:
 		conv.BotState = StateDone
 		conv.Status = "waiting_agent"
-		return e.wa.SendText(msg.From, "Perfect! We'll connect you with our staff shortly 🙂")
+		return e.wa.SendText(msg.From, "Perfeito! Em breve um de nossos atendentes entrará em contato 🙂")
 
 	default:
 		return e.sendMainMenu(conv, msg)
@@ -102,7 +102,7 @@ func (e *Engine) handleMainMenu(conv *models.Conversation, msg IncomingMessage) 
 func (e *Engine) sendServiceList(conv *models.Conversation, to string) error {
 	services, err := e.repo.ListActiveServices(conv.BranchID)
 	if err != nil || len(services) == 0 {
-		return e.wa.SendText(to, "No services registered at the moment. We'll contact you manually.")
+		return e.wa.SendText(to, "Nenhum serviço cadastrado no momento. Entraremos em contato manualmente.")
 	}
 
 	rows := make([]whatsapp.ListRow, 0, len(services))
@@ -110,10 +110,10 @@ func (e *Engine) sendServiceList(conv *models.Conversation, to string) error {
 		rows = append(rows, whatsapp.ListRow{
 			ID:          fmt.Sprintf("service_%d", s.ID),
 			Title:       s.Name,
-			Description: fmt.Sprintf("Starting at R$ %.2f", s.StartingPrice),
+			Description: fmt.Sprintf("A partir de R$ %.2f", s.StartingPrice),
 		})
 	}
-	return e.wa.SendList(to, "Which service would you like to book?", "View services", "Available services", rows)
+	return e.wa.SendList(to, "Qual serviço você deseja agendar?", "Ver serviços", "Serviços disponíveis", rows)
 }
 
 func (e *Engine) handleServiceChoice(conv *models.Conversation, msg IncomingMessage) error {
@@ -126,11 +126,11 @@ func (e *Engine) handleServiceChoice(conv *models.Conversation, msg IncomingMess
 
 	return e.wa.SendButtons(
 		msg.From,
-		"Great choice! Which period do you prefer?",
+		"Ótima escolha! Qual período você prefere?",
 		[]whatsapp.ButtonOption{
-			{ID: PeriodMorning, Title: "Morning"},
-			{ID: PeriodAfternoon, Title: "Afternoon"},
-			{ID: PeriodEvening, Title: "Evening"},
+			{ID: PeriodMorning, Title: "Manhã"},
+			{ID: PeriodAfternoon, Title: "Tarde"},
+			{ID: PeriodEvening, Title: "Noite"},
 		},
 	)
 }
@@ -140,18 +140,18 @@ func (e *Engine) handleSlotChoice(conv *models.Conversation, msg IncomingMessage
 	if period != PeriodMorning && period != PeriodAfternoon && period != PeriodEvening {
 		return e.wa.SendButtons(
 			msg.From,
-			"I didn't understand. Which period do you prefer?",
+			"Não entendi. Qual período você prefere?",
 			[]whatsapp.ButtonOption{
-				{ID: PeriodMorning, Title: "Morning"},
-				{ID: PeriodAfternoon, Title: "Afternoon"},
-				{ID: PeriodEvening, Title: "Evening"},
+				{ID: PeriodMorning, Title: "Manhã"},
+				{ID: PeriodAfternoon, Title: "Tarde"},
+				{ID: PeriodEvening, Title: "Noite"},
 			},
 		)
 	}
 
 	slots, err := e.repo.ListAvailableSlots(conv.BranchID, period)
 	if err != nil || len(slots) == 0 {
-		return e.wa.SendText(msg.From, "No slots available for this period, please choose another (morning/afternoon/evening).")
+		return e.wa.SendText(msg.From, "Não há horários disponíveis neste período. Por favor, escolha outro (manhã/tarde/noite).")
 	}
 
 	conv.Context["slot_id"] = slots[0].ID
@@ -160,10 +160,10 @@ func (e *Engine) handleSlotChoice(conv *models.Conversation, msg IncomingMessage
 
 	return e.wa.SendButtons(
 		msg.From,
-		fmt.Sprintf("I found the slot %s. Confirm the booking?", slots[0].ScheduledAt.Format("01/02 15:04")),
+		fmt.Sprintf("Encontrei o horário %s. Confirmar o agendamento?", slots[0].ScheduledAt.Format("02/01 às 15:04")),
 		[]whatsapp.ButtonOption{
-			{ID: BtnConfirmYes, Title: "Confirm"},
-			{ID: BtnConfirmNo, Title: "Choose another"},
+			{ID: BtnConfirmYes, Title: "Confirmar"},
+			{ID: BtnConfirmNo, Title: "Escolher outro"},
 		},
 	)
 }
@@ -171,13 +171,15 @@ func (e *Engine) handleSlotChoice(conv *models.Conversation, msg IncomingMessage
 func (e *Engine) handleConfirmation(conv *models.Conversation, msg IncomingMessage) error {
 	switch msg.ButtonID {
 	case BtnConfirmYes:
-		slotID, _ := conv.Context["slot_id"].(int)
+		slotIDFloat, _ := conv.Context["slot_id"].(float64)
+		slotID := int(slotIDFloat)
+
 		scheduledAt, _ := conv.Context["slot_time"].(string)
 		serviceID, _ := conv.Context["service_id"].(string)
 
 		appointmentID, err := e.repo.CreateAppointment(conv.ClientID, serviceID, slotID, scheduledAt)
 		if err != nil {
-			return e.wa.SendText(msg.From, "We had a problem confirming. We'll contact you manually.")
+			return e.wa.SendText(msg.From, "Tivemos um problema ao confirmar. Entraremos em contato manualmente.")
 		}
 
 		conv.BotState = StateDone
@@ -192,7 +194,7 @@ func (e *Engine) handleConfirmation(conv *models.Conversation, msg IncomingMessa
 			})
 		}
 
-		return e.wa.SendText(msg.From, "Appointment confirmed! ✅ We'll see you there.")
+		return e.wa.SendText(msg.From, "Agendamento confirmado! ✅ Te esperamos lá.")
 
 	case BtnConfirmNo:
 		conv.BotState = StateChoosingService
@@ -201,10 +203,10 @@ func (e *Engine) handleConfirmation(conv *models.Conversation, msg IncomingMessa
 	default:
 		return e.wa.SendButtons(
 			msg.From,
-			"I didn't understand. Can you confirm the appointment?",
+			"Não entendi. Deseja confirmar o agendamento?",
 			[]whatsapp.ButtonOption{
-				{ID: BtnConfirmYes, Title: "Confirm"},
-				{ID: BtnConfirmNo, Title: "Choose another"},
+				{ID: BtnConfirmYes, Title: "Confirmar"},
+				{ID: BtnConfirmNo, Title: "Escolher outro"},
 			},
 		)
 	}

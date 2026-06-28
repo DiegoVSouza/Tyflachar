@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -84,10 +85,9 @@ func subscribeEvents(ctx context.Context, rdb *redis.Client, hub *ws.Hub) {
 }
 
 func extractBranchIDFromChannel(channel string) string {
-	parts := []byte(channel)
-	start, end := 7, len(parts)-7
-	if start >= end {
+	parts := strings.Split(channel, ":")
+	if len(parts) != 3 {
 		return ""
 	}
-	return string(parts[start:end])
+	return parts[1]
 }

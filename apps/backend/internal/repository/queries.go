@@ -127,8 +127,8 @@ func (r *Repository) ListConversations(branchID int, status string) ([]models.Co
 	rows, err := r.db.Query(r.Ctx(),
 		fmt.Sprintf(`SELECT conv.id, conv.client_id, c.name, c.phone,
 		             conv.status, conv.last_msg_at,
-		             (SELECT content FROM messages WHERE conversation_id = conv.id ORDER BY id DESC LIMIT 1) AS last_message,
-		             (SELECT COUNT(*) FROM messages WHERE conversation_id = conv.id AND direction = 'in' AND read = false) AS unread
+		             COALESCE((SELECT content FROM messages WHERE conversation_id = conv.id ORDER BY id DESC LIMIT 1), '') AS last_message,
+		             COALESCE((SELECT COUNT(*) FROM messages WHERE conversation_id = conv.id AND direction = 'in' AND read = false), 0) AS unread
 		             FROM conversations conv
 		             JOIN clients c ON c.id = conv.client_id
 		             WHERE %s
@@ -263,11 +263,12 @@ func (r *Repository) ListAppointments(branchID int, status, period string) ([]mo
 	return out, nil
 }
 
+// FIX: status padronizado para 'pending' (inglês), igual ao DEFAULT do schema
 func (r *Repository) CreateAppointmentForClient(branchID, clientID int, service, scheduledAt string) (*models.AppointmentWithClient, error) {
 	var a models.AppointmentWithClient
 	err := r.db.QueryRow(r.Ctx(),
 		`INSERT INTO appointments (client_id, service, scheduled_at, status)
-		 SELECT $1, $2, $3::timestamptz, 'pendente'
+		 SELECT $1, $2, $3::timestamptz, 'pending'
 		 WHERE EXISTS (SELECT 1 FROM clients WHERE id = $1 AND branch_id = $4)
 		 RETURNING id, (SELECT name FROM clients WHERE id = $1), service, scheduled_at, status`,
 		clientID, service, scheduledAt, branchID,

@@ -3,9 +3,10 @@ package handlers
 import (
 	"strconv"
 
-	"github.com/gofiber/fiber/v2"
 	"crm-whatsapp-api/internal/models"
 	"crm-whatsapp-api/internal/repository"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 type AppointmentHandler struct {

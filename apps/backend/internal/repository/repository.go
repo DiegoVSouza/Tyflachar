@@ -242,9 +242,9 @@ func (r *Repository) CreateAppointment(clientID int, service string, slotID int,
 func (r *Repository) FindUserByEmail(email string) (*models.User, error) {
 	var u models.User
 	err := r.db.QueryRow(r.Ctx(),
-		`SELECT id, branch_id, email, password_hash, role FROM dashboard_users WHERE email = $1`,
+		`SELECT id, branch_id, email, name, password_hash, role FROM dashboard_users WHERE email = $1`,
 		email,
-	).Scan(&u.ID, &u.BranchID, &u.Email, &u.PasswordHash, &u.Role)
+	).Scan(&u.ID, &u.BranchID, &u.Email, &u.Name, &u.PasswordHash, &u.Role)
 	return &u, err
 }
 

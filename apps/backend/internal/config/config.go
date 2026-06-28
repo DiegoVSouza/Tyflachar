@@ -44,7 +44,7 @@ func Load() *Config {
 		MetaAppSecret:     getEnv("META_APP_SECRET", ""),
 		DefaultBranchID:   defaultBranchID,
 		AnthropicAPIKey:   getEnv("ANTHROPIC_API_KEY", ""),
-		AnthropicModel:    getEnv("ANTHROPIC_MODEL", "claude-3-5-haiku-20241022"),
+		AnthropicModel:    getEnv("ANTHROPIC_MODEL", "claude-haiku-4-5-20251001"),
 	}
 }
 
