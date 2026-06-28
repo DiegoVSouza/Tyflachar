@@ -30,19 +30,18 @@ jobs:
         run: npm ci
 
       - name: Type check
-        run: npm run typecheck
+        run: npx tsc --noEmit
 
       - name: Build
         run: npm run build
         env:
-          CI: false
-          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
-          REACT_APP_WS_URL: ${{ secrets.REACT_APP_WS_URL }}
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_WS_URL: ${{ secrets.VITE_WS_URL }}
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: apps/frontend 
-          command: pages deploy build --project-name=Tyflachar --commit-dirty=true
+          workingDirectory: apps/frontend
+          command: pages deploy dist --project-name=Tyflachar --commit-dirty=true

@@ -25,7 +25,7 @@ export function ClientSearch({ onSelect, value }: Props): React.ReactElement {
 
     setLoading(true);
     fetch(
-      `${process.env['REACT_APP_API_URL'] ?? ''}/api/clientes?q=${encodeURIComponent(debouncedQuery)}`,
+      `${import.meta.env['VITE_API_BASE_URL'] ?? ''}/api/clientes?q=${encodeURIComponent(debouncedQuery)}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token') ?? ''}`,

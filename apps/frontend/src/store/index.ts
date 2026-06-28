@@ -17,13 +17,13 @@ const reducer = {
 };
 
 const devMiddlewares: Middleware[] =
-  process.env.NODE_ENV !== 'production' ? [loggerMiddleware] : [];
+  import.meta.env.NODE_ENV !== 'production' ? [loggerMiddleware] : [];
 
 export const store = configureStore({
   reducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(...devMiddlewares),
-  devTools: process.env.NODE_ENV !== 'production',
+  devTools: import.meta.env.NODE_ENV !== 'production',
 });
 
 export type RootState = {

@@ -179,8 +179,8 @@ Common HTTP codes: `400` · `401` · `403` · `404` · `422` · `500`
 
 | Secret | Used by | Description |
 |---|---|---|
-| `REACT_APP_API_URL` | Frontend CI | e.g. `https://crm-whatsapp-api.fly.dev` |
-| `REACT_APP_WS_URL` | Frontend CI | e.g. `wss://crm-whatsapp-api.fly.dev` |
+| `VITE_API_BASE_URL` | Frontend CI | e.g. `https://crm-whatsapp-api.fly.dev` |
+| `VITE_WS_URL` | Frontend CI | e.g. `wss://crm-whatsapp-api.fly.dev` |
 | `CLOUDFLARE_API_TOKEN` | Frontend CI | Cloudflare API token |
 | `CLOUDFLARE_ACCOUNT_ID` | Frontend CI | Cloudflare account ID |
 | `FLY_API_TOKEN` | Backend CI | Fly.io deploy token |

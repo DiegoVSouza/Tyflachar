@@ -40,7 +40,7 @@ export function Header(): React.ReactElement {
           <MenuIcon />
         </button>
         <span className={styles.appName}>
-          {process.env['REACT_APP_NAME'] ?? 'GSD App'}
+          Tyflachar
         </span>
       </div>
 

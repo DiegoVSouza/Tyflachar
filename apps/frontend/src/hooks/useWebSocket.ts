@@ -5,7 +5,7 @@ import type { WsEvent, WsStatus, Mensagem, Agendamento, ConversaId } from 'types
 import { receberMensagem } from 'store/slices/conversationSlice';
 import { receberNovoAgendamento } from 'store/slices/appointmentSlice';
 
-const WS_BASE = process.env['REACT_APP_WS_URL'] ?? 'ws://localhost:8080';
+const WS_BASE = import.meta.env['VITE_WS_URL'] ?? 'ws://localhost:8080';
 const RECONNECT_DELAY_MS = 3000;
 const MAX_RECONNECT_ATTEMPTS = 10;
 

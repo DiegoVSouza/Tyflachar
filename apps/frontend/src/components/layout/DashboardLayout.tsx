@@ -17,9 +17,9 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { to: '/dashboard/inbox',        label: 'Conversations', icon: '💬' },
-  { to: '/dashboard/appointments', label: 'Appointments',  icon: '📅' },
-  { to: '/dashboard/clients',      label: 'Clients',       icon: '👤' },
+  { to: '/dashboard/inbox', label: 'Conversations', icon: '💬' },
+  { to: '/dashboard/appointments', label: 'Appointments', icon: '📅' },
+  { to: '/dashboard/clients', label: 'Clients', icon: '👤' },
 ];
 
 export function DashboardLayout(): React.ReactElement {
@@ -39,9 +39,9 @@ export function DashboardLayout(): React.ReactElement {
     <div className={styles.layout}>
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
-          <span className={styles.logo}>✂️</span>
+          <span className={styles.logo}></span>
           <span className={styles.salonName}>
-            {process.env['REACT_APP_NAME'] ?? 'RAISSA CACHOS'}
+            Tyflachar
           </span>
         </div>
 

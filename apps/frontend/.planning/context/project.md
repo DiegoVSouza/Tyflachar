@@ -88,7 +88,7 @@ src/
 - Lint: `npm run lint`
 - Format: `npm run format`
 - Env file: `.env` (copy from `.env.example`)
-- Key env var: `REACT_APP_API_BASE_URL`
+- Key env var: `VITE_API_BASE_URL`
 
 ## Skills available
 All skills are in `frontend/skills/` at the repo root. Reference them in task XMLs via:

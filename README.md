@@ -100,8 +100,8 @@ wrangler pages deploy build --project-name=Tyflachar
 | `FLY_API_TOKEN` | Backend deploy on Fly.io |
 | `CLOUDFLARE_API_TOKEN` | Frontend deploy on Cloudflare Pages |
 | `CLOUDFLARE_ACCOUNT_ID` | Frontend deploy on Cloudflare Pages |
-| `REACT_APP_API_URL` | Frontend build — backend REST URL (e.g. `https://tyflachar.fly.dev`) |
-| `REACT_APP_WS_URL` | Frontend build — backend WebSocket URL (e.g. `wss://tyflachar.fly.dev`) |
+| `VITE_API_BASE_URL` | Frontend build — backend REST URL (e.g. `https://tyflachar.fly.dev`) |
+| `VITE_WS_URL` | Frontend build — backend WebSocket URL (e.g. `wss://tyflachar.fly.dev`) |
 
 ---
 

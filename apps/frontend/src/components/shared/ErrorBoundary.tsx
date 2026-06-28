@@ -24,7 +24,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   override componentDidCatch(error: Error, info: ErrorInfo): void {
     // TODO: wire up to Sentry / monitoring service
-    if (process.env.NODE_ENV !== 'production') {
+    if (import.meta.env.NODE_ENV !== 'production') {
       console.error('[ErrorBoundary]', error, info.componentStack);
     }
   }
@@ -46,7 +46,7 @@ export class ErrorBoundary extends Component<Props, State> {
           <p className={styles.message}>
             {message ?? 'Ocorreu um erro inesperado. Tente novamente.'}
           </p>
-          {process.env.NODE_ENV !== 'production' && (
+          {import.meta.env.NODE_ENV !== 'production' && (
             <pre className={styles.details}>{error.message}</pre>
           )}
           <button className={styles.button} onClick={this.handleReset} type="button">

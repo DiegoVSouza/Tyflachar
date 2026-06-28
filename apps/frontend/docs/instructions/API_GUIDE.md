@@ -157,11 +157,11 @@ export const createProduct = createAsyncThunk(
 Variáveis de ambiente no `.env`:
 
 ```
-REACT_APP_API_BASE_URL=https://api.seudominio.com/v1
-REACT_APP_API_TIMEOUT=10000
+VITE_API_BASE_URL=https://api.seudominio.com/v1
+VITE_API_TIMEOUT=10000
 ```
 
-O `apiClient` lê automaticamente o `REACT_APP_API_BASE_URL`.
+O `apiClient` lê automaticamente o `VITE_API_BASE_URL`.
 
 ---
 

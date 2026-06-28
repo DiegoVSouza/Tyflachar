@@ -13,8 +13,8 @@
 import { tokenStorage } from '../utils/tokenStorage';
 import type { ApiErrorData } from 'types';
 
-const BASE_URL: string = (process.env['REACT_APP_API_URL'] as string) ?? '';
-const DEFAULT_TIMEOUT = Number(process.env['REACT_APP_API_TIMEOUT'] ?? 15_000);
+const BASE_URL: string = (import.meta.env['VITE_API_BASE_URL'] as string) ?? '';
+const DEFAULT_TIMEOUT = Number(import.meta.env['VITE_API_TIMEOUT'] ?? 15_000);
 
 // ─── ApiError ─────────────────────────────────────────────────────────────────
 

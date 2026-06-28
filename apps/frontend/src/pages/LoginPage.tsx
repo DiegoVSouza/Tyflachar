@@ -53,7 +53,7 @@ export function LoginPage(): React.ReactElement {
     <div className={styles.page}>
       <div className={styles.card}>
         <div className={styles.logo}>
-          {process.env['REACT_APP_NAME'] ?? 'GSD App'}
+          Tyflachar
         </div>
         <h1 className={styles.title}>Entrar na sua conta</h1>
 
