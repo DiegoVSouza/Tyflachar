@@ -26,6 +26,8 @@ export function AppointmentsPage(): React.ReactElement {
     update(id, data);
   }
 
+
+
   return (
     <div className={styles.page}>
       <header className={styles.pageHeader}>
