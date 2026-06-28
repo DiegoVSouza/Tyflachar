@@ -1,6 +1,6 @@
 # Raissa Cachos — Monorepo
 
-CRM multitenant com assets de negócio múltiplos (Landing Page, Blog, Linktree) para salões especializados em cabelos naturais.
+CRM multitenant com assets de negócio múltiplos (Landing Page, Blog, Linktree)
 
 ---
 
@@ -9,7 +9,7 @@ CRM multitenant com assets de negócio múltiplos (Landing Page, Blog, Linktree)
 | App | Stack | Porta local | Deploy |
 |---|---|---|---|
 | `apps/frontend` | React 18 + TypeScript | `3000` | Cloudflare Pages (`Tyflachar`) |
-| `apps/backend` | Go + Fiber | `8080` | Fly.io (`crm-whatsapp-api`) |
+| `apps/backend` | Go + Fiber | `8080` | Fly.io (`Tyflachar`) |
 
 ---
 
@@ -100,8 +100,8 @@ wrangler pages deploy build --project-name=Tyflachar
 | `FLY_API_TOKEN` | Backend deploy on Fly.io |
 | `CLOUDFLARE_API_TOKEN` | Frontend deploy on Cloudflare Pages |
 | `CLOUDFLARE_ACCOUNT_ID` | Frontend deploy on Cloudflare Pages |
-| `REACT_APP_API_URL` | Frontend build — backend REST URL (e.g. `https://crm-whatsapp-api.fly.dev`) |
-| `REACT_APP_WS_URL` | Frontend build — backend WebSocket URL (e.g. `wss://crm-whatsapp-api.fly.dev`) |
+| `REACT_APP_API_URL` | Frontend build — backend REST URL (e.g. `https://tyflachar.fly.dev`) |
+| `REACT_APP_WS_URL` | Frontend build — backend WebSocket URL (e.g. `wss://tyflachar.fly.dev`) |
 
 ---
 
