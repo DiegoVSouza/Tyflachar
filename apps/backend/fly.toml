@@ -1,16 +1,12 @@
-# fly.toml app configuration file generated for crm-whatsapp-api on 2026-06-16T11:21:19-03:00
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
-
-app = 'crm-whatsapp-api'
+app = 'tyflachar'
 primary_region = 'iad'
 
 [build]
 
 [env]
-  APP_ENV = 'production'
-  APP_PORT = '8080'
+  APP_ENV          = 'production'
+  APP_PORT         = '8080'
+  DEFAULT_BRANCH_ID = '1'
 
 [http_service]
   internal_port = 8080

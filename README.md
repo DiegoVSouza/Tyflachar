@@ -64,12 +64,20 @@ Isso sobe:
 
 ### Backend (Fly.io)
 
-Push na branch `main` com mudanças em `apps/backend/**` dispara o workflow automaticamente.
+Push on branch `main` with changes in `apps/backend/**` triggers the workflow automatically.
 
-Manual:
-```bash
-cd apps/backend
-flyctl deploy
+**First-time setup** (create DB + Redis):
+```powershell
+.\scripts\fly-setup-infra.ps1
+```
+
+**Deploy manually:**
+```powershell
+.\scripts\fly-deploy.ps1 deploy    # secrets + build + deploy
+.\scripts\fly-deploy.ps1 secrets   # push .env secrets only
+.\scripts\fly-deploy.ps1 status    # show status + secrets
+.\scripts\fly-deploy.ps1 logs      # tail logs
+.\scripts\fly-deploy.ps1 destroy   # destroy everything (asks confirmation)
 ```
 
 ### Frontend (Cloudflare Pages)
