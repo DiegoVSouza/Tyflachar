@@ -1,57 +1,57 @@
 import { useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { AppDispatch } from 'store';
-import type { ConversaId, EnviarMensagemInput } from 'types';
+import type { ConversationId, SendMessageInput } from 'types';
 import {
-  fetchConversas,
-  fetchMensagens,
-  enviarMensagem,
-  selecionarConversa,
-  selectConversas,
-  selectConversaSelecionada,
-  selectConversaSelecionadaId,
-  selectMensagens,
-  selectConversaStatus,
-  selectMensagensStatus,
-  selectConversaError,
-  selectTotalunread,
+  fetchConversations,
+  fetchMessages,
+  sendMessage,
+  selectConversation,
+  selectConversations,
+  selectSelectedConversation,
+  selectSelectedConversationId,
+  selectMessages,
+  selectConversationsStatus,
+  selectMessagesStatus,
+  selectConversationError,
+  selectTotalUnread,
 } from 'store/slices/conversationSlice';
 import type { ListConversationsFilters } from 'services/api/conversationService';
 
 export function useConversations(filters: ListConversationsFilters = {}) {
   const dispatch = useDispatch<AppDispatch>();
 
-  const conversations = useSelector(selectConversas);
-  const selectedConversation = useSelector(selectConversaSelecionada);
-  const selectedConversationId = useSelector(selectConversaSelecionadaId);
-  const status = useSelector(selectConversaStatus);
-  const messagesStatus = useSelector(selectMensagensStatus);
-  const error = useSelector(selectConversaError);
-  const totalUnread = useSelector(selectTotalunread);
+  const conversations = useSelector(selectConversations);
+  const selectedConversation = useSelector(selectSelectedConversation);
+  const selectedConversationId = useSelector(selectSelectedConversationId);
+  const status = useSelector(selectConversationsStatus);
+  const messagesStatus = useSelector(selectMessagesStatus);
+  const error = useSelector(selectConversationError);
+  const totalUnread = useSelector(selectTotalUnread);
 
   const messages = useSelector(
-    selectedConversationId ? selectMensagens(selectedConversationId) : () => []
+    selectedConversationId ? selectMessages(selectedConversationId) : () => []
   );
 
   const loadConversations = useCallback(() => {
-    dispatch(fetchConversas(filters));
+    dispatch(fetchConversations(filters));
   }, [dispatch, JSON.stringify(filters)]);
 
   const openConversation = useCallback(
-    (id: ConversaId) => {
-      dispatch(selecionarConversa(id));
-      dispatch(fetchMensagens(id));
+    (id: ConversationId) => {
+      dispatch(selectConversation(id));
+      dispatch(fetchMessages(id));
     },
     [dispatch]
   );
 
   const closeConversation = useCallback(() => {
-    dispatch(selecionarConversa(null));
+    dispatch(selectConversation(null));
   }, [dispatch]);
 
   const send = useCallback(
-    (id: ConversaId, data: EnviarMensagemInput) => {
-      dispatch(enviarMensagem({ id, data }));
+    (id: ConversationId, data: SendMessageInput) => {
+      dispatch(sendMessage({ id, data }));
     },
     [dispatch]
   );

@@ -3,7 +3,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch } from 'store';
 import { logout, selectCurrentUser } from 'store/slices/authSlice';
-import { selectTotalunread } from 'store/slices/conversationSlice';
+import { selectTotalUnread } from 'store/slices/conversationSlice';
 import { tokenStorage } from 'services/utils/tokenStorage';
 import { useWebSocket } from 'hooks/useWebSocket';
 import { WsStatusIndicator } from 'components/shared/WsStatusIndicator';
@@ -26,7 +26,7 @@ export function DashboardLayout(): React.ReactElement {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
-  const totalUnread = useSelector(selectTotalunread);
+  const totalUnread = useSelector(selectTotalUnread);
   const token = tokenStorage.getToken();
   const { wsStatus } = useWebSocket(token);
 

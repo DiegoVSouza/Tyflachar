@@ -1,21 +1,21 @@
 import { useEffect, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import type { Mensagem, ConversaId } from 'types';
-import { selectConversaSelecionadaId, selectConversas } from 'store/slices/conversationSlice';
+import type { Message, ConversationId } from 'types';
+import { selectSelectedConversationId, selectConversations } from 'store/slices/conversationSlice';
 
 export interface ToastItem {
   id: number;
   message: string;
   clientName: string;
-  conversationId: ConversaId;
+  conversationId: ConversationId;
 }
 
-type Handler = (_conversaId: ConversaId, _mensagem: Mensagem) => void;
+type Handler = (_conversationId: ConversationId, _message: Message) => void;
 const handlers = new Set<Handler>();
 
 export const notificationEventBus = {
-  emit(conversaId: ConversaId, mensagem: Mensagem) {
-    handlers.forEach((h) => h(conversaId, mensagem));
+  emit(conversationId: ConversationId, message: Message) {
+    handlers.forEach((h) => h(conversationId, message));
   },
   subscribe(handler: Handler) {
     handlers.add(handler);
@@ -28,26 +28,26 @@ const TOAST_DURATION_MS = 5000;
 
 export function useNotifications() {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
-  const selectedConversationId = useSelector(selectConversaSelecionadaId);
-  const conversations = useSelector(selectConversas);
+  const selectedConversationId = useSelector(selectSelectedConversationId);
+  const conversations = useSelector(selectConversations);
 
   const dismissToast = useCallback((id: number) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
   useEffect(() => {
-    const unsubscribe = notificationEventBus.subscribe((conversaId, mensagem) => {
-      if (conversaId === selectedConversationId) return;
+    const unsubscribe = notificationEventBus.subscribe((conversationId, message) => {
+      if (conversationId === selectedConversationId) return;
 
-      const conversation = conversations.find((c) => c.id === conversaId);
+      const conversation = conversations.find((c) => c.id === conversationId);
       const clientName = conversation?.client_name ?? 'Cliente';
 
       const id = ++toastIdCounter;
       const newToast: ToastItem = {
         id,
-        message: mensagem.conteudo,
+        message: message.content,
         clientName,
-        conversationId: conversaId,
+        conversationId,
       };
 
       setToasts((prev) => [...prev, newToast]);

@@ -1,11 +1,11 @@
 import apiClient from './apiClient';
 import { buildUrl } from '../utils/buildUrl';
 import type {
-  Cliente,
-  client_id,
-  AtualizarClienteInput,
+  Client,
+  ClientId,
+  UpdateClientInput,
   PaginatedResponse,
-  Agendamento,
+  Appointment,
 } from 'types';
 
 const BASE = '/clients';
@@ -19,15 +19,15 @@ export interface ListClientsFilters {
 export const clientService = {
   list: (filters: ListClientsFilters = {}) => {
     const url = buildUrl(BASE, filters as Record<string, string | number>);
-    return apiClient.get<PaginatedResponse<Cliente>>(url);
+    return apiClient.get<PaginatedResponse<Client>>(url);
   },
 
-  getById: (id: client_id) =>
-    apiClient.get<Cliente>(`${BASE}/${id}`),
+  getById: (id: ClientId) =>
+    apiClient.get<Client>(`${BASE}/${id}`),
 
-  getAppointments: (id: client_id) =>
-    apiClient.get<Agendamento[]>(`${BASE}/${id}/appointments`),
+  getAppointments: (id: ClientId) =>
+    apiClient.get<Appointment[]>(`${BASE}/${id}/appointments`),
 
-  update: (id: client_id, data: AtualizarClienteInput) =>
-    apiClient.patch<Cliente>(`${BASE}/${id}/tags`, data),
+  updateTags: (id: ClientId, data: UpdateClientInput) =>
+    apiClient.patch<Client>(`${BASE}/${id}/tags`, data),
 };

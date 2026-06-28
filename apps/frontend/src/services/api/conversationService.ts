@@ -1,18 +1,18 @@
 import apiClient from './apiClient';
 import { buildUrl } from '../utils/buildUrl';
 import type {
-  Conversa,
-  ConversaId,
-  ConversaStatus,
-  Mensagem,
-  EnviarMensagemInput,
+  Conversation,
+  ConversationId,
+  ConversationStatus,
+  Message,
+  SendMessageInput,
   PaginatedResponse,
 } from 'types';
 
 const BASE = '/conversations';
 
 export interface ListConversationsFilters {
-  status?: ConversaStatus;
+  status?: ConversationStatus;
   page?: number;
   limit?: number;
 }
@@ -20,12 +20,12 @@ export interface ListConversationsFilters {
 export const conversationService = {
   list: (filters: ListConversationsFilters = {}) => {
     const url = buildUrl(BASE, filters as Record<string, string | number>);
-    return apiClient.get<Conversa[]>(url);
+    return apiClient.get<Conversation[]>(url);
   },
 
-  listMessages: (id: ConversaId) =>
-    apiClient.get<PaginatedResponse<Mensagem>>(`${BASE}/${id}/messages`),
+  listMessages: (id: ConversationId) =>
+    apiClient.get<PaginatedResponse<Message>>(`${BASE}/${id}/messages`),
 
-  sendMessage: (id: ConversaId, data: EnviarMensagemInput) =>
-    apiClient.post<Mensagem>(`${BASE}/${id}/messages`, data),
+  sendMessage: (id: ConversationId, data: SendMessageInput) =>
+    apiClient.post<Message>(`${BASE}/${id}/messages`, data),
 };

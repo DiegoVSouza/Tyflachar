@@ -1,38 +1,38 @@
 import { useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { AppDispatch } from 'store';
-import type { AgendamentoId, CriarAgendamentoInput, AtualizarAgendamentoInput } from 'types';
+import type { AppointmentId, CreateAppointmentInput, UpdateAppointmentInput } from 'types';
 import {
-  fetchAgendamentos,
-  criarAgendamento,
-  atualizarAgendamento,
-  selectAgendamentos,
-  selectAgendamentoStatus,
-  selectAgendamentoIsLoading,
-  selectAgendamentoError,
+  fetchAppointments,
+  createAppointment,
+  updateAppointment,
+  selectAppointments,
+  selectAppointmentStatus,
+  selectAppointmentIsLoading,
+  selectAppointmentError,
 } from 'store/slices/appointmentSlice';
 import type { ListAppointmentsFilters } from 'services/api/appointmentService';
 
 export function useAppointments(filters: ListAppointmentsFilters = {}) {
   const dispatch = useDispatch<AppDispatch>();
 
-  const appointments = useSelector(selectAgendamentos);
-  const status = useSelector(selectAgendamentoStatus);
-  const isLoading = useSelector(selectAgendamentoIsLoading);
-  const error = useSelector(selectAgendamentoError);
+  const appointments = useSelector(selectAppointments);
+  const status = useSelector(selectAppointmentStatus);
+  const isLoading = useSelector(selectAppointmentIsLoading);
+  const error = useSelector(selectAppointmentError);
 
   const load = useCallback(() => {
-    dispatch(fetchAgendamentos(filters));
+    dispatch(fetchAppointments(filters));
   }, [dispatch, JSON.stringify(filters)]); // eslint-disable-line
 
   const create = useCallback(
-    (data: CriarAgendamentoInput) => dispatch(criarAgendamento(data)),
+    (data: CreateAppointmentInput) => dispatch(createAppointment(data)),
     [dispatch]
   );
 
   const update = useCallback(
-    (id: AgendamentoId, data: AtualizarAgendamentoInput) =>
-      dispatch(atualizarAgendamento({ id, data })),
+    (id: AppointmentId, data: UpdateAppointmentInput) =>
+      dispatch(updateAppointment({ id, data })),
     [dispatch]
   );
 

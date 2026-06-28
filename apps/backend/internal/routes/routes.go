@@ -57,7 +57,6 @@ func Setup(app *fiber.App, d Deps) {
 	protected.Post("/appointments", d.Appointment.Create)
 	protected.Patch("/appointments/:id", d.Appointment.Update)
 
-	// WebSocket — JWT validated via ?token= query param
 	app.Get("/ws/:branchId",
 		middleware.JWTAuthWS(d.Cfg.JWTSecret),
 		handlers.WebSocketUpgrade(d.Hub),

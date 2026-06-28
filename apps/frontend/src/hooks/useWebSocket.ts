@@ -1,9 +1,9 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from 'store';
-import type { WsEvent, WsStatus, Mensagem, Agendamento, ConversaId } from 'types';
-import { receberMensagem } from 'store/slices/conversationSlice';
-import { receberNovoAgendamento } from 'store/slices/appointmentSlice';
+import type { WsEvent, WsStatus, Message, Appointment, ConversationId } from 'types';
+import { receiveMessage } from 'store/slices/conversationSlice';
+import { receiveNewAppointment } from 'store/slices/appointmentSlice';
 
 const WS_BASE = import.meta.env['VITE_WS_URL'] ?? 'ws://localhost:8080';
 const RECONNECT_DELAY_MS = 3000;
@@ -24,23 +24,23 @@ export function useWebSocket(token: string | null): { wsStatus: WsStatus } {
   const reconnectAttempts = useRef(0);
   const reconnectTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isUnmounting = useRef(false);
-  const [wsStatus, setWsStatus] = useState<WsStatus>('desconectado');
+  const [wsStatus, setWsStatus] = useState<WsStatus>('disconnected');
 
   const handleMessage = useCallback(
     (event: MessageEvent) => {
       try {
         const data: WsEvent = JSON.parse(event.data as string);
-        switch (data.tipo) {
-          case 'nova_mensagem': {
-            const { conversaId, mensagem } = data.payload as {
-              conversaId: ConversaId;
-              mensagem: Mensagem;
+        switch (data.type) {
+          case 'new_message': {
+            const { conversationId, message } = data.payload as {
+              conversationId: ConversationId;
+              message: Message;
             };
-            dispatch(receberMensagem({ conversaId, mensagem }));
+            dispatch(receiveMessage({ conversationId, message }));
             break;
           }
-          case 'novo_agendamento':
-            dispatch(receberNovoAgendamento(data.payload as Agendamento));
+          case 'new_appointment':
+            dispatch(receiveNewAppointment(data.payload as Appointment));
             break;
           default:
             break;
@@ -58,25 +58,25 @@ export function useWebSocket(token: string | null): { wsStatus: WsStatus } {
     const branchId = extractBranchId(token);
     if (!branchId) return;
 
-    setWsStatus('conectando');
+    setWsStatus('connecting');
     const url = `${WS_BASE}/ws/${branchId}?token=${token}`;
     const ws = new WebSocket(url);
     wsRef.current = ws;
 
     ws.onopen = () => {
       reconnectAttempts.current = 0;
-      setWsStatus('conectado');
+      setWsStatus('connected');
     };
 
     ws.onmessage = handleMessage;
 
     ws.onerror = () => {
-      setWsStatus('erro');
+      setWsStatus('error');
     };
 
     ws.onclose = () => {
       if (isUnmounting.current) return;
-      setWsStatus('desconectado');
+      setWsStatus('disconnected');
       if (reconnectAttempts.current < MAX_RECONNECT_ATTEMPTS) {
         reconnectAttempts.current += 1;
         reconnectTimeout.current = setTimeout(connect, RECONNECT_DELAY_MS);

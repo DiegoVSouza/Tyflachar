@@ -1,15 +1,15 @@
 import React from 'react';
-import type { Cliente, client_id } from 'types';
+import type { Client, ClientId } from 'types';
 import styles from './ClientsTable.module.css';
 
 interface Props {
-  clients: Cliente[];
+  clients: Client[];
   total: number;
   isLoading: boolean;
-  selectedClientId: client_id | null;
+  selectedClientId: ClientId | null;
   query: string;
   onSearch: (q: string) => void;
-  onSelect: (id: client_id) => void;
+  onSelect: (id: ClientId) => void;
 }
 
 function formatDate(iso: string): string {
@@ -38,35 +38,35 @@ export function ClientsTable({
             id="input-search-clients"
             type="search"
             className={styles.searchInput}
-            placeholder="Pesquisar por nome ou telefone…"
+            placeholder="Search by name or phone…"
             value={query}
             onChange={(e) => onSearch(e.target.value)}
-            aria-label="Pesquisar clientes"
+            aria-label="Search clients"
           />
         </div>
         <span className={styles.total}>
-          {isLoading ? '…' : `${total} cliente${total !== 1 ? 's' : ''}`}
+          {isLoading ? '…' : `${total} client${total !== 1 ? 's' : ''}`}
         </span>
       </div>
 
       {isLoading ? (
         <div className={styles.state} role="status" aria-live="polite">
           <span className={styles.spinner} aria-hidden="true" />
-          Carregando clientes…
+          Loading clients…
         </div>
       ) : clients.length === 0 ? (
         <div className={styles.state} role="status">
           <span className={styles.emptyIcon} aria-hidden="true">👤</span>
-          <p>{query ? 'Nenhum cliente encontrado.' : 'Nenhum cliente cadastrado ainda.'}</p>
+          <p>{query ? 'No clients found.' : 'No clients yet.'}</p>
         </div>
       ) : (
-        <div className={styles.tableWrapper} role="region" aria-label="Lista de clientes">
+        <div className={styles.tableWrapper} role="region" aria-label="Clients list">
           <table className={styles.table}>
             <thead className={styles.thead}>
               <tr>
-                <th scope="col" className={styles.th}>Cliente</th>
-                <th scope="col" className={styles.th}>Telefone</th>
-                <th scope="col" className={styles.th}>Registrado</th>
+                <th scope="col" className={styles.th}>Client</th>
+                <th scope="col" className={styles.th}>Phone</th>
+                <th scope="col" className={styles.th}>Registered</th>
                 <th scope="col" className={styles.th}>Tags</th>
               </tr>
             </thead>
@@ -84,26 +84,26 @@ export function ClientsTable({
                   <td className={styles.td}>
                     <div className={styles.clientInfo}>
                       <div className={styles.avatar} aria-hidden="true">
-                        {c.nome[0]?.toUpperCase()}
+                        {c.name[0]?.toUpperCase()}
                       </div>
-                      <span className={styles.name}>{c.nome}</span>
+                      <span className={styles.name}>{c.name}</span>
                     </div>
                   </td>
                   <td className={styles.td}>
-                    <span className={styles.phone}>{c.telefone}</span>
+                    <span className={styles.phone}>{c.phone}</span>
                   </td>
                   <td className={styles.td}>
-                    <span className={styles.date}>{formatDate(c.criadoEm)}</span>
+                    <span className={styles.date}>{formatDate(c.created_at)}</span>
                   </td>
                   <td className={styles.td}>
                     <div className={styles.tags}>
-                      {c.tags.length === 0 && (
+                      {c.tags?.length === 0 && (
                         <span className={styles.noTags}>—</span>
                       )}
-                      {c.tags.slice(0, 3).map((tag) => (
+                      {c.tags?.slice(0, 3).map((tag) => (
                         <span key={tag} className={styles.chip}>{tag}</span>
                       ))}
-                      {c.tags.length > 3 && (
+                      {c.tags?.length > 3 && (
                         <span className={styles.chipMore}>+{c.tags.length - 3}</span>
                       )}
                     </div>

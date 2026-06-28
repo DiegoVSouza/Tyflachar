@@ -1,5 +1,4 @@
 // ─── Branded types ────────────────────────────────────────────────────────────
-// Prevents mixing domain primitives at compile time.
 
 type Brand<K, T> = K & { readonly __brand: T };
 
@@ -91,89 +90,95 @@ export type LoadStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
 
 // ─── CRM — Branded IDs ────────────────────────────────────────────────────────
 
-export type ConversaId = Brand<string, 'ConversaId'>;
-export type MensagemId = Brand<string, 'MensagemId'>;
-export type AgendamentoId = Brand<string, 'AgendamentoId'>;
-export type client_id = Brand<string, 'client_id'>;
+export type ConversationId = Brand<string, 'ConversationId'>;
+export type MessageId = Brand<string, 'MessageId'>;
+export type AppointmentId = Brand<string, 'AppointmentId'>;
+export type ClientId = Brand<string, 'ClientId'>;
 
-// ─── CRM — Conversa ───────────────────────────────────────────────────────────
+// ─── CRM — Conversation ───────────────────────────────────────────────────────
 
-export type ConversaStatus = 'aberta' | 'aguardando' | 'fechada';
+export type ConversationStatus = 'open' | 'waiting_agent' | 'closed';
 
-export interface Conversa {
-  id: ConversaId;
-  client_id: client_id;
+export interface Conversation {
+  id: ConversationId;
+  client_id: ClientId;
   client_name: string;
   client_phone: string;
   last_message: string;
   last_message_at: string; // ISO 8601
   unread: number;
-  status: ConversaStatus;
+  status: ConversationStatus;
 }
 
-export interface Mensagem {
-  id: MensagemId;
-  conversaId: ConversaId;
-  conteudo: string;
-  criadaEm: string; // ISO 8601
-  origem: 'cliente' | 'bot' | 'atendente';
+// direction mirrors backend: 'in' = client sent, 'out' = agent/bot sent
+export type MessageDirection = 'in' | 'out';
+
+export interface Message {
+  id: MessageId;
+  conversation_id: ConversationId;
+  direction: MessageDirection;
+  content: string;
+  type: string;
+  wa_message_id?: string;
+  status: string;
+  timestamp: string; // ISO 8601
 }
 
-export interface EnviarMensagemInput {
-  conteudo: string;
+export interface SendMessageInput {
+  content: string;
 }
 
-// ─── CRM — Agendamento ────────────────────────────────────────────────────────
+// ─── CRM — Appointment ────────────────────────────────────────────────────────
 
-export type AgendamentoStatus = 'pendente' | 'confirmado' | 'cancelado';
+export type AppointmentStatus = 'pending' | 'confirmed' | 'cancelled';
 
-export interface Agendamento {
-  id: AgendamentoId;
-  client_id: client_id;
+export interface Appointment {
+  id: AppointmentId;
+  client_id?: ClientId;
   client_name: string;
-  servico: string;
-  dataHora: string; // ISO 8601
-  status: AgendamentoStatus;
+  service: string;
+  scheduled_at: string; // ISO 8601
+  status: AppointmentStatus;
 }
 
-export interface CriarAgendamentoInput {
-  client_id: client_id;
-  servico: string;
-  dataHora: string;
+export interface CreateAppointmentInput {
+  client_id: ClientId;
+  service: string;
+  scheduled_at: string; // ISO 8601
 }
 
-export interface AtualizarAgendamentoInput {
-  status?: AgendamentoStatus;
-  servico?: string;
-  dataHora?: string;
+export interface UpdateAppointmentInput {
+  status?: AppointmentStatus;
+  service?: string;
+  scheduled_at?: string;
 }
 
-// ─── CRM — Cliente ────────────────────────────────────────────────────────────
+// ─── CRM — Client ─────────────────────────────────────────────────────────────
 
-export interface Cliente {
-  id: client_id;
-  nome: string;
-  telefone: string;
-  criadoEm: string; // ISO 8601
+export interface Client {
+  id: ClientId;
+  branch_id?: number;
+  name: string;
+  phone: string;
   tags: string[];
-  conversaId?: ConversaId;
+  created_at: string; // ISO 8601
+  conversation_id?: ConversationId;
 }
 
-export interface AtualizarClienteInput {
+export interface UpdateClientInput {
   tags?: string[];
 }
 
 // ─── WebSocket ────────────────────────────────────────────────────────────────
 
 export type WsEventType =
-  | 'nova_mensagem'
-  | 'novo_agendamento'
-  | 'status_atualizado';
+  | 'new_message'
+  | 'new_appointment'
+  | 'status_updated';
 
 export interface WsEvent<T = unknown> {
-  tipo: WsEventType;
+  type: WsEventType;
   payload: T;
 }
 
-export type WsStatus = 'conectando' | 'conectado' | 'desconectado' | 'erro';
-
+export type WsStatus = 'connecting' | 'connected' | 'disconnected' | 'error';

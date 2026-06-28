@@ -1,18 +1,18 @@
 import apiClient from './apiClient';
 import { buildUrl } from '../utils/buildUrl';
 import type {
-  Agendamento,
-  AgendamentoId,
-  CriarAgendamentoInput,
-  AtualizarAgendamentoInput,
-  AgendamentoStatus,
+  Appointment,
+  AppointmentId,
+  CreateAppointmentInput,
+  UpdateAppointmentInput,
+  AppointmentStatus,
 } from 'types';
 
 const BASE = '/appointments';
 
 export interface ListAppointmentsFilters {
-  status?: AgendamentoStatus;
-  period?: 'hoje' | 'semana' | 'mes';
+  status?: AppointmentStatus;
+  period?: 'today' | 'week' | 'month';
   page?: number;
   limit?: number;
 }
@@ -20,15 +20,15 @@ export interface ListAppointmentsFilters {
 export const appointmentService = {
   list: (filters: ListAppointmentsFilters = {}) => {
     const url = buildUrl(BASE, filters as Record<string, string | number>);
-    return apiClient.get<Agendamento[]>(url);
+    return apiClient.get<Appointment[]>(url);
   },
 
-  create: (data: CriarAgendamentoInput) =>
-    apiClient.post<Agendamento>(BASE, data),
+  create: (data: CreateAppointmentInput) =>
+    apiClient.post<Appointment>(BASE, data),
 
-  update: (id: AgendamentoId, data: AtualizarAgendamentoInput) =>
-    apiClient.patch<Agendamento>(`${BASE}/${id}`, data),
+  update: (id: AppointmentId, data: UpdateAppointmentInput) =>
+    apiClient.patch<Appointment>(`${BASE}/${id}`, data),
 
-  remove: (id: AgendamentoId) =>
+  remove: (id: AppointmentId) =>
     apiClient.delete<void>(`${BASE}/${id}`),
 };

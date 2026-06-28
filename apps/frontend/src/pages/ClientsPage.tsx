@@ -3,7 +3,7 @@ import { useClients } from 'hooks/useClients';
 import { useDebounce } from 'hooks/useDebounce';
 import { ClientsTable } from 'components/clients/ClientsTable';
 import { ClientDrawer } from 'components/clients/ClientDrawer';
-import type { client_id } from 'types';
+import type { ClientId } from 'types';
 import styles from './ClientsPage.module.css';
 
 export function ClientsPage(): React.ReactElement {
@@ -23,11 +23,11 @@ export function ClientsPage(): React.ReactElement {
     reload,
   } = useClients(debouncedQuery ? { q: debouncedQuery } : {});
 
-  function handleSelect(id: client_id) {
+  function handleSelect(id: ClientId) {
     openClient(id);
   }
 
-  async function handleUpdateTags(id: client_id, tags: string[]) {
+  async function handleUpdateTags(id: ClientId, tags: string[]) {
     await updateTags(id, { tags });
     reload();
   }

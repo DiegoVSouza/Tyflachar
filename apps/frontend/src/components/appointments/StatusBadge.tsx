@@ -1,15 +1,15 @@
 import React from 'react';
-import type { AgendamentoStatus } from 'types';
+import type { AppointmentStatus } from 'types';
 import styles from './StatusBadge.module.css';
 
 interface Props {
-  status: AgendamentoStatus;
+  status: AppointmentStatus;
 }
 
-const LABEL: Record<AgendamentoStatus, string> = {
-  pendente: 'Pendente',
-  confirmado: 'Confirmado',
-  cancelado: 'Cancelado',
+const LABEL: Record<AppointmentStatus, string> = {
+  pending: 'Pending',
+  confirmed: 'Confirmed',
+  cancelled: 'Cancelled',
 };
 
 export function StatusBadge({ status }: Props): React.ReactElement {

@@ -4,27 +4,27 @@ import {
   type ListAppointmentsFilters,
 } from 'services/api/appointmentService';
 import type {
-  Agendamento,
-  AgendamentoId,
-  CriarAgendamentoInput,
-  AtualizarAgendamentoInput,
+  Appointment,
+  AppointmentId,
+  CreateAppointmentInput,
+  UpdateAppointmentInput,
   LoadStatus,
 } from 'types';
 import type { RootState } from '../index';
 
 interface AppointmentState {
-  agendamentos: Agendamento[];
+  appointments: Appointment[];
   status: LoadStatus;
   error: string | null;
 }
 
 const initialState: AppointmentState = {
-  agendamentos: [],
+  appointments: [],
   status: 'idle',
   error: null,
 };
 
-export const fetchAgendamentos = createAsyncThunk(
+export const fetchAppointments = createAsyncThunk(
   'appointment/fetchAppointments',
   async (filters: ListAppointmentsFilters = {}, { rejectWithValue }) => {
     try {
@@ -35,9 +35,9 @@ export const fetchAgendamentos = createAsyncThunk(
   }
 );
 
-export const criarAgendamento = createAsyncThunk(
+export const createAppointment = createAsyncThunk(
   'appointment/create',
-  async (data: CriarAgendamentoInput, { rejectWithValue }) => {
+  async (data: CreateAppointmentInput, { rejectWithValue }) => {
     try {
       return await appointmentService.create(data);
     } catch (error) {
@@ -46,10 +46,10 @@ export const criarAgendamento = createAsyncThunk(
   }
 );
 
-export const atualizarAgendamento = createAsyncThunk(
+export const updateAppointment = createAsyncThunk(
   'appointment/update',
   async (
-    { id, data }: { id: AgendamentoId; data: AtualizarAgendamentoInput },
+    { id, data }: { id: AppointmentId; data: UpdateAppointmentInput },
     { rejectWithValue }
   ) => {
     try {
@@ -64,8 +64,8 @@ const appointmentSlice = createSlice({
   name: 'appointment',
   initialState,
   reducers: {
-    receberNovoAgendamento(state, action: PayloadAction<Agendamento>) {
-      state.agendamentos.unshift(action.payload);
+    receiveNewAppointment(state, action: PayloadAction<Appointment>) {
+      state.appointments.unshift(action.payload);
     },
     clearAppointmentError(state) {
       state.error = null;
@@ -73,46 +73,46 @@ const appointmentSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAgendamentos.pending, (state) => {
+      .addCase(fetchAppointments.pending, (state) => {
         state.status = 'loading';
         state.error = null;
       })
-      .addCase(fetchAgendamentos.fulfilled, (state, action) => {
+      .addCase(fetchAppointments.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.agendamentos = action.payload;
+        state.appointments = action.payload;
       })
-      .addCase(fetchAgendamentos.rejected, (state, action) => {
+      .addCase(fetchAppointments.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload as string;
       });
 
     builder
-      .addCase(criarAgendamento.fulfilled, (state, action) => {
+      .addCase(createAppointment.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.agendamentos.unshift(action.payload);
+        state.appointments.unshift(action.payload);
       })
-      .addCase(criarAgendamento.rejected, (state, action) => {
+      .addCase(createAppointment.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload as string;
       });
 
     builder
-      .addCase(atualizarAgendamento.fulfilled, (state, action) => {
-        const idx = state.agendamentos.findIndex((a) => a.id === action.payload.id);
-        if (idx !== -1) state.agendamentos[idx] = action.payload;
+      .addCase(updateAppointment.fulfilled, (state, action) => {
+        const idx = state.appointments.findIndex((a) => a.id === action.payload.id);
+        if (idx !== -1) state.appointments[idx] = action.payload;
       })
-      .addCase(atualizarAgendamento.rejected, (state, action) => {
+      .addCase(updateAppointment.rejected, (state, action) => {
         state.error = action.payload as string;
       });
   },
 });
 
-export const { receberNovoAgendamento, clearAppointmentError } = appointmentSlice.actions;
+export const { receiveNewAppointment, clearAppointmentError } = appointmentSlice.actions;
 
-export const selectAgendamentos = (state: RootState) => state.appointment.agendamentos;
-export const selectAgendamentoStatus = (state: RootState) => state.appointment.status;
-export const selectAgendamentoError = (state: RootState) => state.appointment.error;
-export const selectAgendamentoIsLoading = (state: RootState) =>
+export const selectAppointments = (state: RootState) => state.appointment.appointments;
+export const selectAppointmentStatus = (state: RootState) => state.appointment.status;
+export const selectAppointmentError = (state: RootState) => state.appointment.error;
+export const selectAppointmentIsLoading = (state: RootState) =>
   state.appointment.status === 'loading';
 
 export default appointmentSlice.reducer;

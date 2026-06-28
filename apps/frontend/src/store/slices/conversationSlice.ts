@@ -1,35 +1,35 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import { conversationService, type ListConversationsFilters } from 'services/api/conversationService';
 import type {
-  Conversa,
-  ConversaId,
-  Mensagem,
-  EnviarMensagemInput,
+  Conversation,
+  ConversationId,
+  Message,
+  SendMessageInput,
   LoadStatus,
 } from 'types';
 import type { RootState } from '../index';
 
 interface ConversationState {
-  conversas: Conversa[];
-  mensagens: Record<string, Mensagem[]>;
-  conversaSelecionadaId: ConversaId | null;
+  conversations: Conversation[];
+  messages: Record<string, Message[]>;
+  selectedConversationId: ConversationId | null;
   status: LoadStatus;
-  mensagensStatus: LoadStatus;
+  messagesStatus: LoadStatus;
   error: string | null;
-  totalunread: number;
+  totalUnread: number;
 }
 
 const initialState: ConversationState = {
-  conversas: [],
-  mensagens: {},
-  conversaSelecionadaId: null,
+  conversations: [],
+  messages: {},
+  selectedConversationId: null,
   status: 'idle',
-  mensagensStatus: 'idle',
+  messagesStatus: 'idle',
   error: null,
-  totalunread: 0,
+  totalUnread: 0,
 };
 
-export const fetchConversas = createAsyncThunk(
+export const fetchConversations = createAsyncThunk(
   'conversation/fetchConversations',
   async (filters: ListConversationsFilters = {}, { rejectWithValue }) => {
     try {
@@ -40,27 +40,27 @@ export const fetchConversas = createAsyncThunk(
   }
 );
 
-export const fetchMensagens = createAsyncThunk(
+export const fetchMessages = createAsyncThunk(
   'conversation/fetchMessages',
-  async (id: ConversaId, { rejectWithValue }) => {
+  async (id: ConversationId, { rejectWithValue }) => {
     try {
       const resp = await conversationService.listMessages(id);
-      return { id, mensagens: resp.items };
+      return { id, messages: resp.items };
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
   }
 );
 
-export const enviarMensagem = createAsyncThunk(
+export const sendMessage = createAsyncThunk(
   'conversation/sendMessage',
   async (
-    { id, data }: { id: ConversaId; data: EnviarMensagemInput },
+    { id, data }: { id: ConversationId; data: SendMessageInput },
     { rejectWithValue }
   ) => {
     try {
-      const mensagem = await conversationService.sendMessage(id, data);
-      return { id, mensagem };
+      const message = await conversationService.sendMessage(id, data);
+      return { id, message };
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
@@ -71,32 +71,32 @@ const conversationSlice = createSlice({
   name: 'conversation',
   initialState,
   reducers: {
-    selecionarConversa(state, action: PayloadAction<ConversaId | null>) {
-      state.conversaSelecionadaId = action.payload;
+    selectConversation(state, action: PayloadAction<ConversationId | null>) {
+      state.selectedConversationId = action.payload;
       if (action.payload) {
-        const conv = state.conversas.find((c) => c.id === action.payload);
+        const conv = state.conversations.find((c) => c.id === action.payload);
         if (conv) conv.unread = 0;
       }
-      state.totalunread = state.conversas.reduce((sum, c) => sum + c.unread, 0);
+      state.totalUnread = state.conversations.reduce((sum, c) => sum + c.unread, 0);
     },
 
-    receberMensagem(state, action: PayloadAction<{ conversaId: ConversaId; mensagem: Mensagem }>) {
-      const { conversaId, mensagem } = action.payload;
-      const conv = state.conversas.find((c) => c.id === conversaId);
+    receiveMessage(state, action: PayloadAction<{ conversationId: ConversationId; message: Message }>) {
+      const { conversationId, message } = action.payload;
+      const conv = state.conversations.find((c) => c.id === conversationId);
       if (conv) {
-        conv.last_message = mensagem.conteudo;
-        conv.last_message_at = mensagem.criadaEm;
-        if (state.conversaSelecionadaId !== conversaId) {
+        conv.last_message = message.content;
+        conv.last_message_at = message.timestamp;
+        if (state.selectedConversationId !== conversationId) {
           conv.unread += 1;
         }
       }
-      if (state.mensagens[conversaId]) {
-        state.mensagens[conversaId].push(mensagem);
+      if (state.messages[conversationId]) {
+        state.messages[conversationId].push(message);
       }
-      state.conversas.sort(
+      state.conversations.sort(
         (a, b) => new Date(b.last_message_at).getTime() - new Date(a.last_message_at).getTime()
       );
-      state.totalunread = state.conversas.reduce((sum, c) => sum + c.unread, 0);
+      state.totalUnread = state.conversations.reduce((sum, c) => sum + c.unread, 0);
     },
 
     clearConversationError(state) {
@@ -105,53 +105,54 @@ const conversationSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchConversas.pending, (state) => {
+      .addCase(fetchConversations.pending, (state) => {
         state.status = 'loading';
         state.error = null;
       })
-      .addCase(fetchConversas.fulfilled, (state, action) => {
+      .addCase(fetchConversations.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.conversas = action.payload;
-        state.totalunread = action.payload.reduce((sum, c) => sum + c.unread, 0);
+        state.conversations = action.payload;
+        state.totalUnread = action.payload.reduce((sum, c) => sum + c.unread, 0);
       })
-      .addCase(fetchConversas.rejected, (state, action) => {
+      .addCase(fetchConversations.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload as string;
       });
 
     builder
-      .addCase(fetchMensagens.pending, (state) => {
-        state.mensagensStatus = 'loading';
+      .addCase(fetchMessages.pending, (state) => {
+        state.messagesStatus = 'loading';
       })
-      .addCase(fetchMensagens.fulfilled, (state, action) => {
-        state.mensagensStatus = 'succeeded';
-        state.mensagens[action.payload.id] = action.payload.mensagens;
+      .addCase(fetchMessages.fulfilled, (state, action) => {
+        state.messagesStatus = 'succeeded';
+        state.messages[action.payload.id] = action.payload.messages;
       })
-      .addCase(fetchMensagens.rejected, (state, action) => {
-        state.mensagensStatus = 'failed';
+      .addCase(fetchMessages.rejected, (state, action) => {
+        state.messagesStatus = 'failed';
         state.error = action.payload as string;
       });
 
-    builder.addCase(enviarMensagem.fulfilled, (state, action) => {
-      const { id, mensagem } = action.payload;
-      if (!state.mensagens[id]) state.mensagens[id] = [];
-      state.mensagens[id].push(mensagem);
+    builder.addCase(sendMessage.fulfilled, (state, action) => {
+      const { id, message } = action.payload;
+      if (!state.messages[id]) state.messages[id] = [];
+      state.messages[id].push(message);
     });
   },
 });
 
-export const { selecionarConversa, receberMensagem, clearConversationError } = conversationSlice.actions;
+export const { selectConversation, receiveMessage, clearConversationError } = conversationSlice.actions;
 
-export const selectConversas = (state: RootState) => state.conversation.conversas;
-export const selectConversaSelecionada = (state: RootState) =>
-  state.conversation.conversas.find((c) => c.id === state.conversation.conversaSelecionadaId) ?? null;
-export const selectMensagens = (conversaId: ConversaId) => (state: RootState) =>
-  state.conversation.mensagens[conversaId] ?? [];
-export const selectConversaStatus = (state: RootState) => state.conversation.status;
-export const selectMensagensStatus = (state: RootState) => state.conversation.mensagensStatus;
-export const selectConversaError = (state: RootState) => state.conversation.error;
-export const selectTotalunread = (state: RootState) => state.conversation.totalunread;
-export const selectConversaSelecionadaId = (state: RootState) =>
-  state.conversation.conversaSelecionadaId;
+// Selectors
+export const selectConversations = (state: RootState) => state.conversation.conversations;
+export const selectSelectedConversation = (state: RootState) =>
+  state.conversation.conversations.find((c) => c.id === state.conversation.selectedConversationId) ?? null;
+export const selectMessages = (conversationId: ConversationId) => (state: RootState) =>
+  state.conversation.messages[conversationId] ?? [];
+export const selectConversationsStatus = (state: RootState) => state.conversation.status;
+export const selectMessagesStatus = (state: RootState) => state.conversation.messagesStatus;
+export const selectConversationError = (state: RootState) => state.conversation.error;
+export const selectTotalUnread = (state: RootState) => state.conversation.totalUnread;
+export const selectSelectedConversationId = (state: RootState) =>
+  state.conversation.selectedConversationId;
 
 export default conversationSlice.reducer;

@@ -26,31 +26,45 @@
 
 /* ─── Status variants ────────────────────── */
 
-.conectado .dot {
+.connected .dot {
   background: var(--color-success-500);
   box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.25);
   animation: pulse 2s infinite;
 }
 
-.conectando .dot {
+.connecting .dot {
   background: var(--color-warning-500);
   animation: blink 1s infinite;
 }
 
-.desconectado .dot {
+.disconnected .dot {
   background: var(--color-neutral-400);
 }
 
-.erro .dot {
+.error .dot {
   background: var(--color-danger-500);
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.2; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.2;
+  }
 }

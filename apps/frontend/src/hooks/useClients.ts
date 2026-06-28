@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { AppDispatch } from 'store';
-import type { client_id, AtualizarClienteInput } from 'types';
+import type { ClientId, UpdateClientInput } from 'types';
 import {
   fetchClientes,
   fetchAgendamentosDoCliente,
@@ -33,7 +33,7 @@ export function useClients(filters: ListClientsFilters = {}) {
   }, [dispatch, JSON.stringify(filters)]); // eslint-disable-line
 
   const openClient = useCallback(
-    (id: client_id) => {
+    (id: ClientId) => {
       dispatch(selecionarCliente(id));
       dispatch(fetchAgendamentosDoCliente(id));
     },
@@ -45,7 +45,7 @@ export function useClients(filters: ListClientsFilters = {}) {
   }, [dispatch]);
 
   const updateTags = useCallback(
-    (id: client_id, data: AtualizarClienteInput) =>
+    (id: ClientId, data: UpdateClientInput) =>
       dispatch(atualizarTagsCliente({ id, data })),
     [dispatch]
   );

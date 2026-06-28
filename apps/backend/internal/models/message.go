@@ -8,7 +8,7 @@ type Message struct {
 	Direction      string    `json:"direction"` // "in" or "out"
 	Content        string    `json:"content"`
 	Type           string    `json:"type"` // text, button, interactive
-	WaMessageID    string    `json:"wa_message_id,omitempty"`
+	WaMessageID    *string   `json:"wa_message_id,omitempty"`
 	Status         string    `json:"status"`
 	Timestamp      time.Time `json:"timestamp"`
 }

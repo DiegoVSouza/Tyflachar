@@ -231,11 +231,11 @@ func (r *Repository) ListAppointments(branchID int, status, period string) ([]mo
 		where += fmt.Sprintf(" AND a.status = $%d", len(args))
 	}
 	switch period {
-	case "hoje":
+	case "today":
 		where += " AND DATE(a.scheduled_at) = CURRENT_DATE"
-	case "semana":
+	case "week":
 		where += " AND DATE(a.scheduled_at) BETWEEN CURRENT_DATE AND CURRENT_DATE + 7"
-	case "mes":
+	case "month":
 		where += " AND DATE_TRUNC('month', a.scheduled_at) = DATE_TRUNC('month', CURRENT_DATE)"
 	}
 

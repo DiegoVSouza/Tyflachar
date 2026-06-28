@@ -2,30 +2,30 @@ import React, { useState } from 'react';
 import { useConversations } from 'hooks/useConversations';
 import { ConversationList } from 'components/inbox/ConversationList';
 import { MessagesPanel } from 'components/inbox/MessagesPanel';
-import type { ConversaId, ConversaStatus } from 'types';
+import type { ConversationId, ConversationStatus } from 'types';
 import styles from './InboxPage.module.css';
 
-type QuickFilter = 'all' | ConversaStatus;
+type QuickFilter = 'all' | ConversationStatus;
 
 const FILTERS: { label: string; value: QuickFilter }[] = [
-  { label: 'All', value: 'all' },
-  { label: 'Open', value: 'aberta' },
-  { label: 'Waiting', value: 'aguardando' },
-  { label: 'Closed', value: 'fechada' },
+  { label: 'Todos', value: 'all' },
+  { label: 'Aberto', value: 'open' },
+  { label: 'Aguardando', value: 'waiting_agent' },
+  { label: 'Fechado', value: 'closed' },
 ];
 
 export function InboxPage(): React.ReactElement {
   const [filter, setFilter] = useState<QuickFilter>('all');
 
   const { conversations, selectedConversation, messages, isLoading, isMessagesLoading, openConversation, send } =
-    useConversations(filter !== 'all' ? { status: filter as ConversaStatus } : {});
+    useConversations(filter !== 'all' ? { status: filter as ConversationStatus } : {});
 
-  function handleSelect(id: ConversaId) {
+  function handleSelect(id: ConversationId) {
     openConversation(id);
   }
 
-  function handleSend(id: ConversaId, text: string) {
-    send(id, { conteudo: text });
+  function handleSend(id: ConversationId, text: string) {
+    send(id, { content: text });
   }
 
   return (

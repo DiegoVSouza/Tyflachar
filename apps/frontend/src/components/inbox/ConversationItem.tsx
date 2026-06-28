@@ -1,9 +1,9 @@
 import React from 'react';
-import type { Conversa } from 'types';
+import type { Conversation } from 'types';
 import styles from './ConversationItem.module.css';
 
 interface Props {
-  conversation: Conversa;
+  conversation: Conversation;
   isSelected: boolean;
   onClick: () => void;
 }
@@ -17,7 +17,6 @@ function formatTime(iso: string): string {
   return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
 }
 
-
 export function ConversationItem({ conversation, isSelected, onClick }: Props): React.ReactElement {
   return (
     <button
@@ -25,7 +24,7 @@ export function ConversationItem({ conversation, isSelected, onClick }: Props): 
       className={`${styles.item} ${isSelected ? styles.selected : ''}`}
       onClick={onClick}
       aria-pressed={isSelected}
-      aria-label={`Conversa com ${conversation.client_name}, ${conversation.unread} não lidas`}
+      aria-label={`Conversation with ${conversation.client_name}, ${conversation.unread} unread`}
     >
       <div className={styles.avatar} aria-hidden="true">
         {conversation.client_name[0]?.toUpperCase()}
@@ -40,7 +39,7 @@ export function ConversationItem({ conversation, isSelected, onClick }: Props): 
         <div className={styles.bottomRow}>
           <p className={styles.preview}>{conversation.last_message}</p>
           {conversation.unread > 0 && (
-            <span className={styles.badge} aria-label={`${conversation.unread} não lidas`}>
+            <span className={styles.badge} aria-label={`${conversation.unread} unread`}>
               {conversation.unread}
             </span>
           )}

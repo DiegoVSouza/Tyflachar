@@ -1,18 +1,18 @@
 import React from 'react';
-import type { Agendamento, AgendamentoId, AgendamentoStatus, AtualizarAgendamentoInput } from 'types';
+import type { Appointment, AppointmentId, AppointmentStatus, UpdateAppointmentInput } from 'types';
 import { StatusBadge } from './StatusBadge';
 import styles from './AppointmentsTable.module.css';
 
 interface Props {
-  appointments: Agendamento[];
+  appointments: Appointment[];
   isLoading: boolean;
-  onUpdateStatus: (id: AgendamentoId, data: AtualizarAgendamentoInput) => void;
+  onUpdateStatus: (id: AppointmentId, data: UpdateAppointmentInput) => void;
 }
 
-const NEXT_STATUS: Record<AgendamentoStatus, AgendamentoStatus[]> = {
-  pendente: ['confirmado', 'cancelado'],
-  confirmado: ['cancelado'],
-  cancelado: [],
+const NEXT_STATUS: Record<AppointmentStatus, AppointmentStatus[]> = {
+  pending: ['confirmed', 'cancelled'],
+  confirmed: ['cancelled'],
+  cancelled: [],
 };
 
 function formatDateTime(iso: string): string {
@@ -31,7 +31,7 @@ export function AppointmentsTable({ appointments, isLoading, onUpdateStatus }: P
     return (
       <div className={styles.state} role="status" aria-live="polite">
         <span className={styles.spinner} aria-hidden="true" />
-        Carregando agendamentos…
+        Loading appointments…
       </div>
     );
   }
@@ -40,7 +40,7 @@ export function AppointmentsTable({ appointments, isLoading, onUpdateStatus }: P
     return (
       <div className={styles.state} role="status">
         <span className={styles.emptyIcon} aria-hidden="true">📅</span>
-        <p>Nenhum agendamento encontrado.</p>
+        <p>No appointments found.</p>
       </div>
     );
   }
@@ -50,11 +50,11 @@ export function AppointmentsTable({ appointments, isLoading, onUpdateStatus }: P
       <table className={styles.table}>
         <thead className={styles.thead}>
           <tr>
-            <th scope="col" className={styles.th}>Cliente</th>
-            <th scope="col" className={styles.th}>Serviço</th>
-            <th scope="col" className={styles.th}>Data e Hora</th>
+            <th scope="col" className={styles.th}>Client</th>
+            <th scope="col" className={styles.th}>Service</th>
+            <th scope="col" className={styles.th}>Date & Time</th>
             <th scope="col" className={styles.th}>Status</th>
-            <th scope="col" className={styles.th}>Ações</th>
+            <th scope="col" className={styles.th}>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -66,10 +66,10 @@ export function AppointmentsTable({ appointments, isLoading, onUpdateStatus }: P
                   <span className={styles.name}>{appt.client_name}</span>
                 </td>
                 <td className={styles.td}>
-                  <span className={styles.service}>{appt.servico}</span>
+                  <span className={styles.service}>{appt.service}</span>
                 </td>
                 <td className={styles.td}>
-                  <span className={styles.dateTime}>{formatDateTime(appt.dataHora)}</span>
+                  <span className={styles.dateTime}>{formatDateTime(appt.scheduled_at)}</span>
                 </td>
                 <td className={styles.td}>
                   <StatusBadge status={appt.status} />
@@ -82,9 +82,9 @@ export function AppointmentsTable({ appointments, isLoading, onUpdateStatus }: P
                         id={`btn-status-${appt.id}-${newStatus}`}
                         className={`${styles.btnAction} ${styles[newStatus]}`}
                         onClick={() => onUpdateStatus(appt.id, { status: newStatus })}
-                        title={`Marcar como ${newStatus}`}
+                        title={`Mark as ${newStatus}`}
                       >
-                        {newStatus === 'confirmado' ? '✅ Confirmar' : '✕ Cancelar'}
+                        {newStatus === 'confirmed' ? '✅ Confirm' : '✕ Cancel'}
                       </button>
                     ))}
                     {next.length === 0 && (
