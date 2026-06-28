@@ -20,7 +20,7 @@ trap cleanup INT TERM EXIT
 
 echo ""
 echo "======================================"
-echo "  Raissa Cachos — Dev Environment"
+echo "  Tyflachar — Dev Environment"
 echo "======================================"
 echo ""
 

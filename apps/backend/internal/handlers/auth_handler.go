@@ -95,6 +95,7 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 	}
 
 	user, err := h.repo.FindUserByEmail(req.Email)
+
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "invalid credentials"})
 	}
@@ -119,7 +120,6 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 		"token": signed,
 		"user": fiber.Map{
 			"id":    user.ID,
-			"name":  user.Name,
 			"email": user.Email,
 			"role":  user.Role,
 		},
@@ -134,11 +134,9 @@ func (h *AuthHandler) GetMe(c *fiber.Ctx) error {
 	}
 	return c.JSON(fiber.Map{
 		"id":    user.ID,
-		"name":  user.Name,
 		"email": user.Email,
 		"role":  user.Role,
 	})
 }
 
-// hashPassword is exported for seeding scripts.
 var _ = hashPassword

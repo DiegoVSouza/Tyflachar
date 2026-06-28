@@ -8,6 +8,10 @@ apps/frontend/.env.*.local
 # ─── Backend ────────────────────────────────────────────
 apps/backend/*.env
 apps/backend/.env
+apps/backend/*.env.local
+apps/backend/.env.local
+apps/backend/*.env.prod
+apps/backend/.env.prod
 apps/backend/server
 apps/backend/tmp/
 

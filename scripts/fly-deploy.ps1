@@ -7,7 +7,7 @@
 
   Commands:
     deploy      - Full deploy: push secrets, run migrations, deploy app
-    secrets     - Push .env secrets to Fly.io (skip commented and local-only vars)
+    secrets     - Push .env.prod secrets to Fly.io (skip commented and local-only vars)
     migrate     - Run DB migrations remotely via fly ssh console
     destroy     - Delete the Fly.io app completely (asks for confirmation)
     status      - Show app status, logs URL and secrets list
@@ -29,7 +29,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $Root        = Split-Path -Parent $PSScriptRoot
 $BackendDir  = Join-Path $Root 'apps\backend'
-$EnvFile     = Join-Path $BackendDir '.env'
+$EnvFile     = Join-Path $BackendDir '.env.prod'
 $AppName     = 'tyflachar'
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -68,7 +68,7 @@ $LocalOnlyKeys = @(
 
 function Read-EnvFile {
     if (-not (Test-Path $EnvFile)) {
-        Write-Error "Could not find .env at $EnvFile"
+        Write-Error "Could not find .env.prod at $EnvFile"
         exit 1
     }
 
@@ -108,7 +108,7 @@ function Invoke-Secrets {
     $pairs = Read-EnvFile
 
     if ($pairs.Count -eq 0) {
-        Write-Warn "No uploadable secrets found in .env"
+        Write-Warn "No uploadable secrets found in .env.prod"
         return
     }
 

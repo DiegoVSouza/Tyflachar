@@ -26,8 +26,6 @@ func JWTAuth(secret string) fiber.Handler {
 	}
 }
 
-// JWTAuthWS validates the token from the ?token= query parameter.
-// Used exclusively for WebSocket upgrade requests.
 func JWTAuthWS(secret string) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		tokenStr := c.Query("token")

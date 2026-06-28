@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	"crm-whatsapp-api/internal/models"
+
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -241,9 +242,9 @@ func (r *Repository) CreateAppointment(clientID int, service string, slotID int,
 func (r *Repository) FindUserByEmail(email string) (*models.User, error) {
 	var u models.User
 	err := r.db.QueryRow(r.Ctx(),
-		`SELECT id, branch_id, name, email, password_hash FROM dashboard_users WHERE email = $1`,
+		`SELECT id, branch_id, email, password_hash, role FROM dashboard_users WHERE email = $1`,
 		email,
-	).Scan(&u.ID, &u.BranchID, &u.Name, &u.Email, &u.PasswordHash)
+	).Scan(&u.ID, &u.BranchID, &u.Email, &u.PasswordHash, &u.Role)
 	return &u, err
 }
 

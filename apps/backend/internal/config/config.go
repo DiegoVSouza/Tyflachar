@@ -8,11 +8,11 @@ import (
 )
 
 type Config struct {
-	AppPort           string
-	DatabaseURL       string
-	RedisURL          string
-	JWTSecret         string
-	AllowedOrigins    string
+	AppPort        string
+	DatabaseURL    string
+	RedisURL       string
+	JWTSecret      string
+	AllowedOrigins string
 
 	MetaAPIVersion    string
 	MetaPhoneNumberID string
@@ -20,10 +20,10 @@ type Config struct {
 	MetaVerifyToken   string
 	MetaAppSecret     string
 
-	DefaultBranchID   int
+	DefaultBranchID int
 
-	AnthropicAPIKey   string
-	AnthropicModel    string
+	AnthropicAPIKey string
+	AnthropicModel  string
 }
 
 func Load() *Config {

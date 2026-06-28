@@ -40,10 +40,8 @@ func main() {
 	waClient := whatsapp.NewClient(cfg)
 	hub := ws.NewHub()
 
-	// Fixed state-machine engine (always available)
 	fixedEngine := chatbot.NewEngine(waClient, repo, publisher)
 
-	// LLM engine — only created when Anthropic API key is set
 	var llmEngine *chatbot.LLMEngine
 	if cfg.AnthropicAPIKey != "" {
 		llmClient := llm.NewClient(cfg.AnthropicAPIKey, cfg.AnthropicModel)
@@ -85,8 +83,6 @@ func subscribeEvents(ctx context.Context, rdb *redis.Client, hub *ws.Hub) {
 	}
 }
 
-// extractBranchIDFromChannel parses "branch:123:events" → "123".
-// "branch:" = 7 chars, ":events" = 7 chars
 func extractBranchIDFromChannel(channel string) string {
 	parts := []byte(channel)
 	start, end := 7, len(parts)-7

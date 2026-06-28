@@ -22,7 +22,7 @@ INSERT INTO dashboard_users (branch_id, email, password_hash, role)
 VALUES (
     1,
     'admin@test.com',
-    '$argon2id$v=19$m=65536,t=3,p=4$gspHaszAoF41XXcuwYeYQw$01cQ8LjV/lk65UP63r/BooHhiiEMvjIUPbFK9S6TGBM',
+    '$argon2id$v=19$m=65536,t=3,p=4$hUGtHQ+ETAReBjpAD3kCNA$8FmYYHTeBejng1WanfJ3sJwwTgSoZxXQuxiHnCtWNas',
     'admin'
 );
 

@@ -8,7 +8,7 @@ $Root = Split-Path -Parent $PSScriptRoot
 
 Write-Host ""
 Write-Host "======================================" -ForegroundColor Cyan
-Write-Host "  Raissa Cachos — Dev Environment" -ForegroundColor Cyan
+Write-Host "  Tyflachar — Dev Environment" -ForegroundColor Cyan
 Write-Host "======================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -22,42 +22,32 @@ Write-Host ""
 Write-Host "      Aguardando banco ficar pronto..." -ForegroundColor Gray
 Start-Sleep -Seconds 3
 
-# 2. Backend Go
-Write-Host "[2/3] Iniciando Backend (Go)..." -ForegroundColor Yellow
-$backendJob = Start-Job -ScriptBlock {
-    param($root)
-    Set-Location "$root\apps\backend"
-    go run ./cmd/server
-} -ArgumentList $Root
+# 2. Backend — terminal separado com titulo
+Write-Host "[2/3] Iniciando Backend (Go + Air)..." -ForegroundColor Yellow
+Start-Process powershell -ArgumentList @(
+    "-NoExit",
+    "-Command",
+    "& { `$host.UI.RawUI.WindowTitle = 'Tyflachar — Backend :8080'; Set-Location '$Root\apps\backend'; air }"
+)
 Write-Host "      OK — http://localhost:8080" -ForegroundColor Green
 Write-Host ""
 
-# 3. Frontend React
-Write-Host "[3/3] Iniciando Frontend (React)..." -ForegroundColor Yellow
-$frontendJob = Start-Job -ScriptBlock {
-    param($root)
-    Set-Location "$root\apps\frontend"
-    npm start
-} -ArgumentList $Root
+# 3. Frontend — terminal separado com titulo
+Write-Host "[3/3] Iniciando Frontend (React/Vite)..." -ForegroundColor Yellow
+Start-Process powershell -ArgumentList @(
+    "-NoExit",
+    "-Command",
+    "& { `$host.UI.RawUI.WindowTitle = 'Tyflachar — Frontend :3000'; Set-Location '$Root\apps\frontend'; npm run dev }"
+)
 Write-Host "      OK — http://localhost:3000" -ForegroundColor Green
 Write-Host ""
 
 Write-Host "======================================" -ForegroundColor Cyan
-Write-Host "  Tudo rodando. Ctrl+C para parar." -ForegroundColor Cyan
+Write-Host "  Tudo rodando em terminais separados." -ForegroundColor Cyan
+Write-Host "  Feche as janelas para encerrar." -ForegroundColor Cyan
 Write-Host "======================================" -ForegroundColor Cyan
 Write-Host ""
 
-# Mantém o script vivo e mostra logs
-try {
-    while ($true) {
-        Receive-Job $backendJob  -ErrorAction SilentlyContinue
-        Receive-Job $frontendJob -ErrorAction SilentlyContinue
-        Start-Sleep -Milliseconds 500
-    }
-} finally {
-    Write-Host "`nEncerrando processos..." -ForegroundColor Red
-    Stop-Job $backendJob, $frontendJob -ErrorAction SilentlyContinue
-    Remove-Job $backendJob, $frontendJob -ErrorAction SilentlyContinue
-    docker compose -f "$Root\docker-compose.yml" stop
-    Write-Host "Encerrado." -ForegroundColor Red
-}
+# Opcional: abre o browser automaticamente
+Start-Sleep -Seconds 4
+Start-Process "http://localhost:3000"

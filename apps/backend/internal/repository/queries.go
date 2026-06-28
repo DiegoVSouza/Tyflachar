@@ -298,9 +298,9 @@ func (r *Repository) UpdateAppointment(branchID, appointmentID int, status strin
 func (r *Repository) FindUserByID(userID int) (*models.User, error) {
 	var u models.User
 	err := r.db.QueryRow(r.Ctx(),
-		`SELECT id, branch_id, name, email, role, created_at FROM users WHERE id = $1`,
+		`SELECT id, branch_id, email, role, created_at FROM dashboard_users WHERE id = $1`,
 		userID,
-	).Scan(&u.ID, &u.BranchID, &u.Name, &u.Email, &u.Role, &u.CreatedAt)
+	).Scan(&u.ID, &u.BranchID, &u.Email, &u.Role, &u.CreatedAt)
 	if err != nil {
 		return nil, err
 	}

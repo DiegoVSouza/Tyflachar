@@ -74,7 +74,7 @@ Push on branch `main` with changes in `apps/backend/**` triggers the workflow au
 **Deploy manually:**
 ```powershell
 .\scripts\fly-deploy.ps1 deploy    # secrets + build + deploy
-.\scripts\fly-deploy.ps1 secrets   # push .env secrets only
+.\scripts\fly-deploy.ps1 secrets   # push .env.prod secrets only
 .\scripts\fly-deploy.ps1 status    # show status + secrets
 .\scripts\fly-deploy.ps1 logs      # tail logs
 .\scripts\fly-deploy.ps1 destroy   # destroy everything (asks confirmation)
