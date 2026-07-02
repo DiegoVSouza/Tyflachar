@@ -52,6 +52,11 @@ echo "======================================"
 echo "  Tudo rodando. Ctrl+C para parar."
 echo "======================================"
 echo ""
+echo "  Banco vazio? O seed de dev (filial, login admin@test.com/admin123,"
+echo "  clientes/conversas de exemplo) nao roda mais automaticamente."
+echo "  Rode manualmente, apos o backend subir e aplicar as migrations:"
+echo "    (cd apps/backend && go run scripts/seed/main.go)"
+echo ""
 
 # Aguarda processos
 wait "$BACKEND_PID" "$FRONTEND_PID"

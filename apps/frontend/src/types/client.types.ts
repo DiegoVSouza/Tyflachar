@@ -50,8 +50,7 @@ export interface PhilosophyConfig {
 }
 
 export interface ServiceItem {
-  /** Identificador do ícone SVG. Ex: "cut", "drop", "flare", "eco" */
-  icon: 'cut' | 'drop' | 'flare' | 'eco' | string;
+  icon: string;
   title: string;
   desc: string;
   price: string;
