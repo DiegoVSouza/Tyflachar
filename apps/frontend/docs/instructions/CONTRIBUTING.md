@@ -99,7 +99,9 @@ O linter cuida automaticamente — não discuta estilo, configure o ESLint.
 7. Utils e types
 8. Estilos (CSS Modules)
 
-```js
+**Nota importante sobre imports:** o padrão real (confirmado em `App.tsx` e outros arquivos) é `baseUrl: "src"` com imports "nus", sem prefixo. O `tsconfig.json` já não declara mais um alias `@/*` (foi removido — nunca foi usado em nenhum arquivo real, era dívida técnica):
+
+```ts
 // 1. React
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -109,28 +111,34 @@ import { format } from 'date-fns';
 
 // 3. Store
 import { useSelector } from 'react-redux';
-import { selectUser } from '@/store/slices/authSlice';
+import { store } from 'store';
+import { selectCurrentUser } from 'store/slices/authSlice';
 
 // 4. Hooks
-import { useUsers } from '@/hooks/useUsers';
+import { useUsers } from 'hooks/useUsers';
 
 // 5. Componentes
-import { Button } from '@/components/ui/Button';
+import { Button } from 'components/ui/Button';
+import { ProtectedRoute } from 'components/shared/ProtectedRoute';
 
-// 6. Utils
-import { formatCurrency } from '@/utils/formatters';
+// 6. Utils e types
+import { ClientConfig } from 'types/client.types';
 
 // 7. Estilos
 import styles from './MyPage.module.css';
 ```
+
+Não use `@/...` em código novo — siga o padrão de import "nu" acima (equivalente a `baseUrl: "src"`). O alias `@/*` não existe mais no `tsconfig.json`.
 
 ---
 
 ## Proibições
 
 ❌ `console.log` em código commitado (use `console.warn` ou `console.error` se necessário)
-❌ `any` em TypeScript / PropTypes ausentes em componentes
+❌ `any` em TypeScript
 ❌ Chamadas de API fora do service layer
 ❌ `useSelector` / `useDispatch` direto em componentes (use hooks)
-❌ Estilos inline (`style={{ }}`) exceto para valores dinâmicos
+❌ Estilos inline (`style={{ }}`) exceto para valores dinâmicos — **exceção conhecida hoje:** `App.tsx` (`LoadingFallback`, ~linhas 17-27) e `ClientPage.tsx` (tela de carregamento, ~linhas 108-116) usam `style={{ ... }}` com valores majoritariamente estáticos. Isso é dívida técnica a ser corrigida (mover para CSS Module), não um padrão a seguir em código novo.
 ❌ Comentários `// TODO` sem issue linkada
+
+> **Nota:** o projeto é 100% TypeScript com `strict: true` — não há PropTypes em nenhum componente (nem faz sentido usá-los junto com tipagem estática).

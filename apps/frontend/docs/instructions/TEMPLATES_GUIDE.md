@@ -21,8 +21,8 @@ Nenhum dado fica hardcoded no template. Tudo vem do `config.json` do cliente.
 | Template | Caminho | Status |
 |---|---|---|
 | `LandingPageTemplate` | `src/templates/LandingPageTemplate/` | ✅ Ativo |
-| `BlogTemplate` | `src/templates/BlogTemplate/` | 🚧 Em construção |
-| `LinktreeTemplate` | `src/templates/LinktreeTemplate/` | 🚧 Em construção |
+| `BlogTemplate` | — | ❌ Não existe. A rota `/:clientSlug/blog` renderiza apenas um `<div>` placeholder inline em `src/pages/ClientPage.tsx` ("Blog em breve — {config.brand.name}", ~linha 125). Não há componente, pasta ou esqueleto algum — criar o `BlogTemplate` real é trabalho futuro do zero. |
+| `LinktreeTemplate` | — | ❌ Não existe. A rota `/:clientSlug/links` renderiza apenas um `<div>` placeholder inline em `src/pages/ClientPage.tsx` ("Linktree em breve — {config.brand.name}", ~linha 129). Mesma observação: não há esqueleto de componente, apenas texto estático. |
 
 ---
 
@@ -130,14 +130,17 @@ pages: {
 }
 ```
 
-### 5. Registre a rota em App.tsx
+### 5. Registre o cliente/asset — não há rota por cliente em App.tsx
 
-```tsx
-// src/App.tsx
-{config.pages.meuAsset && (
-  <Route path="/:slug/meu-asset" element={<MeuNovoTemplate config={config} />} />
-)}
-```
+**Correção importante:** `App.tsx` **não** tem rotas condicionais por cliente/asset como `{config.pages.meuAsset && <Route .../>}`. As rotas públicas em `App.tsx` são fixas e genéricas (`/:clientSlug`, `/:clientSlug/blog`, `/:clientSlug/links`) e não mudam ao adicionar templates novos.
+
+O roteamento dinâmico real passa pelo `CLIENT_REGISTRY` em `src/pages/ClientPage.tsx`, e a decisão de qual template renderizar para cada `page` (`landing` | `blog` | `linktree`) é feita dentro do próprio `ClientPage.tsx`. Para adicionar um asset totalmente novo (uma quarta "página" além de landing/blog/linktree), seria necessário:
+
+1. Adicionar o novo `PageType` em `ClientPage.tsx`
+2. Adicionar uma nova rota fixa em `App.tsx` (ex.: `/:clientSlug/meu-asset`) apontando para `<ClientPage page="meuAsset" />`
+3. Adicionar o `if (page === 'meuAsset') return <MeuNovoTemplate config={config} />;` dentro de `ClientPage.tsx`
+
+Ver `docs/instructions/CLIENTS_GUIDE.md` (seção "Registre o cliente no `CLIENT_REGISTRY`") para o processo completo e atualizado de registro de cliente/roteamento.
 
 ---
 
@@ -162,5 +165,5 @@ pages: {
 - [ ] CSS Module usa apenas CSS variables (sem cores/fontes hardcoded)
 - [ ] Tipo adicionado em `client.types.ts`
 - [ ] Chave adicionada no `config.json` do cliente de teste
-- [ ] Rota registrada em `App.tsx`
+- [ ] `PageType`/roteamento atualizado em `ClientPage.tsx` (não em `App.tsx` — ver `docs/instructions/CLIENTS_GUIDE.md`)
 - [ ] Entrada adicionada neste guia (tabela de templates disponíveis)

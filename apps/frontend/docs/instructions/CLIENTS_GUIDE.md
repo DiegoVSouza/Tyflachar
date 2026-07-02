@@ -203,32 +203,56 @@ Recomendado:
 - Hero: 1600×900px mínimo
 - Galeria: 800×800px ou superior, JPG/WebP
 
-### 3. Registre a rota
+### 3. Registre o cliente no `CLIENT_REGISTRY`
 
-Em `src/App.tsx`, adicione o import da config e a rota do cliente:
+**Não existe `ClientRoutes` nem rota por cliente em `App.tsx`.** O `App.tsx` real já tem rotas genéricas fixas que não mudam por cliente (~linhas 40-42):
 
 ```tsx
-import hairdresserConfig from './clients/hairdresser/config.json';
-// import novoClienteConfig from './clients/<slug>/config.json';
-
-// Na árvore de rotas:
-<Route path="/hairdresser/*" element={<ClientRoutes config={hairdresserConfig} />} />
-// <Route path="/<slug>/*" element={<ClientRoutes config={novoClienteConfig} />} />
+<Route path="/:clientSlug" element={<ClientPage page="landing" />} />
+<Route path="/:clientSlug/blog" element={<ClientPage page="blog" />} />
+<Route path="/:clientSlug/links" element={<ClientPage page="linktree" />} />
 ```
 
-### 4. Valide
+O roteamento dinâmico por slug acontece dentro de `src/pages/ClientPage.tsx`, através de um `CLIENT_REGISTRY`: um mapa estático `Record<string, () => Promise<...>>` de import dinâmico (~linhas 30-32). O próprio topo do arquivo (~linhas 10-15) já documenta esse processo:
+
+```ts
+/* Para adicionar um novo cliente:
+ *   - Criar src/clients/<slug>/config.json
+ *   - Registrar o slug no CLIENT_REGISTRY abaixo
+ *   - Colocar as imagens em public/clients/<slug>/images/
+ */
+```
+
+O passo oficial é adicionar uma entrada no `CLIENT_REGISTRY`:
+
+```ts
+const CLIENT_REGISTRY: Record<string, () => Promise<{ default: ClientConfig }>> = {
+  hairdresser: () => import('clients/hairdresser/config.json') as Promise<{ default: ClientConfig }>,
+  // <slug>: () => import('clients/<slug>/config.json') as Promise<{ default: ClientConfig }>,
+};
+```
+
+Usamos um mapa estático (em vez de import totalmente dinâmico por string) porque bundlers (Vite/Rollup) precisam de strings literais para tree-shaking e code-splitting corretos.
+
+### 4. Tema (nenhum passo manual em CSS — resolvido)
+
+O tema visual do cliente novo é aplicado automaticamente a partir do bloco `theme` do `config.json`, via `src/hooks/useClientTheme.ts` (ver `docs/instructions/HOOKS_GUIDE.md` e ADR-002 em `docs/architecture/ARCHITECTURE.md`). **Não é mais necessário editar `src/styles/tokens.css`** — esse arquivo não tem mais blocos `[data-tenant='<slug>']` hardcoded por cliente; só preencher `theme` no `config.json` (passo 1) já é suficiente.
+
+Se algum campo de `theme` ficar de fora do `config.json` (todos exceto `colorPrimary`/`colorBg` são opcionais em `ClientTheme`), o hook usa um valor derivado da paleta informada como fallback — não é necessário preencher todos os campos para o tema funcionar, mas o resultado fica mais fiel quanto mais campos forem definidos.
+
+### 5. Valide
 
 - [ ] A rota `/<slug>` renderiza a landing page
-- [ ] A rota `/<slug>/blog` está disponível (se `blog.enabled: true`)
-- [ ] A rota `/<slug>/links` mostra o linktree (se `linktree.links` está preenchido)
-- [ ] O tema visual (cores, fontes) está correto no browser
+- [ ] A rota `/<slug>/blog` renderiza (hoje é **apenas um placeholder de texto** — `<div>Blog em breve — {config.brand.name}</div>` — não existe um `BlogTemplate` real; não espere layout de blog)
+- [ ] A rota `/<slug>/links` renderiza (mesma ressalva: hoje é só o placeholder `<div>Linktree em breve — {config.brand.name}</div>`, não existe um `LinktreeTemplate` real)
+- [ ] O tema visual (cores, fontes) está correto no browser — abra `/<slug>` e confirme visualmente; não há mais passo manual em `tokens.css` a esquecer
 - [ ] As imagens carregam sem 404
 
 ---
 
 ## Regras de configuração
 
-- **Nunca hardcode** cores, fontes ou textos de cliente nos templates — tudo via `config.json`
+- **Nunca hardcode** cores, fontes ou textos de cliente nos **templates** (componentes React) nem em `tokens.css` — tudo via `config.json` → `theme`, injetado em runtime por `useClientTheme` (ver ADR-002 em `docs/architecture/ARCHITECTURE.md`, resolvido).
 - **Slugs são imutáveis** após o cliente estar em produção (afeta URLs)
 - **Fontes do Google Fonts** precisam ser carregadas no `public/index.html` além de declaradas no `theme`
 - **Imagens** devem estar em `public/` (não em `src/`) para serem servidas como assets estáticos

@@ -44,3 +44,8 @@ desktop.ini
 # ─── Docker ─────────────────────────────────────────────
 # (docker-compose.override.yml pode ser local)
 docker-compose.override.yml
+
+# ─── GSD (docs locais de trabalho para agentes de IA) ────
+# Estado de sessão/planejamento, não é documentação oficial do projeto.
+apps/frontend/docs/gsd/
+apps/backend/docs/gsd/

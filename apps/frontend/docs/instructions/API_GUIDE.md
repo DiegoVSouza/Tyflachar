@@ -9,14 +9,20 @@
 ```
 src/services/
 ├── api/
-│   ├── apiClient.js        ← cliente HTTP base (fetch wrapper)
-│   ├── authService.js      ← exemplo: endpoints de autenticação
-│   └── userService.js      ← exemplo: endpoints de usuário
+│   ├── apiClient.ts          ← cliente HTTP base (fetch wrapper) — inclui
+│   │                            tratamento de erro (ApiError) e timeout,
+│   │                            não há um handleResponse separado
+│   ├── authService.ts        ← endpoints de autenticação
+│   ├── userService.ts        ← endpoints de usuário
+│   ├── appointmentService.ts ← endpoints de agendamentos
+│   ├── clientService.ts      ← endpoints de clientes do CRM
+│   └── conversationService.ts← endpoints de conversas/mensagens (Inbox)
 └── utils/
-    ├── buildUrl.js         ← monta URLs com query params
-    ├── handleResponse.js   ← trata status HTTP e erros
-    └── tokenStorage.js     ← lê/escreve token no localStorage
+    ├── buildUrl.ts          ← monta URLs com query params
+    └── tokenStorage.ts      ← lê/escreve token no localStorage
 ```
+
+**Services reais existentes hoje** em `src/services/api/`: `appointmentService.ts`, `authService.ts`, `clientService.ts`, `conversationService.ts`, `userService.ts` (além do próprio `apiClient.ts`).
 
 ---
 
@@ -26,13 +32,13 @@ O `apiClient` é um wrapper em cima do `fetch` nativo que:
 
 - Injeta o token de autenticação automaticamente
 - Adiciona headers padrão (`Content-Type`, `Accept`)
-- Trata erros HTTP (4xx, 5xx) de forma padronizada
-- Suporta cancelamento via `AbortController`
+- Trata erros HTTP (4xx, 5xx) de forma padronizada, lançando `ApiError`
+- Suporta cancelamento via `AbortController` (manual, passado pelo chamador) **e** timeout automático embutido
 
 ### Uso básico
 
-```js
-import apiClient from '@/services/api/apiClient';
+```ts
+import apiClient from 'services/api/apiClient';
 
 // GET
 const user = await apiClient.get('/users/1');
@@ -52,8 +58,8 @@ await apiClient.delete('/users/1');
 
 ### Com query params
 
-```js
-import { buildUrl } from '@/services/utils/buildUrl';
+```ts
+import { buildUrl } from 'services/utils/buildUrl';
 
 const url = buildUrl('/users', { page: 1, limit: 20, search: 'João' });
 // → /users?page=1&limit=20&search=Jo%C3%A3o
@@ -61,9 +67,9 @@ const url = buildUrl('/users', { page: 1, limit: 20, search: 'João' });
 const users = await apiClient.get(url);
 ```
 
-### Com cancelamento
+### Com cancelamento manual
 
-```js
+```ts
 const controller = new AbortController();
 
 const data = await apiClient.get('/users', {
@@ -76,59 +82,105 @@ useEffect(() => {
 }, []);
 ```
 
+### Timeout automático embutido
+
+Além do cancelamento manual acima, **toda requisição já tem um timeout automático**, implementado em `createAbortSignal` (`apiClient.ts`, linha ~17):
+
+```ts
+const DEFAULT_TIMEOUT = Number(import.meta.env['VITE_API_TIMEOUT'] ?? 15_000); // 15000ms
+```
+
+Se a requisição não responder dentro do timeout, o `AbortController` interno aborta a chamada automaticamente e o erro chega como `ApiError` (ver seção de erros abaixo). Você pode sobrescrever o timeout por chamada:
+
+```ts
+await apiClient.get('/relatorio-pesado', { timeout: 60_000 }); // 60s para essa chamada específica
+```
+
+O `signal` manual (`AbortController` do chamador) e o timeout automático coexistem — o cancelamento acontece pelo que disparar primeiro.
+
+### Upload de arquivos (`apiClient.upload`)
+
+Para `FormData`/multipart (upload de arquivos, imagens etc.), use `apiClient.upload` em vez de `post`. Ele **não** define `Content-Type` manualmente — o browser define o boundary do multipart automaticamente:
+
+```ts
+const formData = new FormData();
+formData.append('file', file);
+formData.append('description', 'Foto do salão');
+
+const result = await apiClient.upload('/uploads', formData);
+```
+
 ---
 
 ## Criando um Service
 
-Cada domínio tem seu próprio service. Exemplo:
+Cada domínio tem seu próprio service. Services reais hoje: `appointmentService.ts`, `authService.ts`, `clientService.ts`, `conversationService.ts`, `userService.ts`. Exemplo real (`clientService.ts`):
 
-```js
-// src/services/api/productService.js
+```ts
+// src/services/api/clientService.ts
 
 import apiClient from './apiClient';
 import { buildUrl } from '../utils/buildUrl';
+import type { Client, ClientId, UpdateClientInput, PaginatedResponse, Appointment } from 'types';
 
-const BASE = '/products';
+const BASE = '/clients';
 
-export const productService = {
-  list: (filters = {}) => {
-    const url = buildUrl(BASE, filters);
-    return apiClient.get(url);
+export interface ListClientsFilters {
+  q?: string;
+  page?: number;
+  limit?: number;
+}
+
+export const clientService = {
+  list: (filters: ListClientsFilters = {}) => {
+    const url = buildUrl(BASE, filters as Record<string, string | number>);
+    return apiClient.get<PaginatedResponse<Client>>(url);
   },
 
-  getById: (id) => apiClient.get(`${BASE}/${id}`),
+  getById: (id: ClientId) => apiClient.get<Client>(`${BASE}/${id}`),
 
-  create: (data) => apiClient.post(BASE, data),
+  getAppointments: (id: ClientId) => apiClient.get<Appointment[]>(`${BASE}/${id}/appointments`),
 
-  update: (id, data) => apiClient.put(`${BASE}/${id}`, data),
-
-  remove: (id) => apiClient.delete(`${BASE}/${id}`),
+  updateTags: (id: ClientId, data: UpdateClientInput) =>
+    apiClient.patch<Client>(`${BASE}/${id}/tags`, data),
 };
 ```
+
+Outro exemplo real, `appointmentService.ts`, segue o mesmo padrão (`list`, `create`, `update`, `remove`) consumindo `apiClient` e `buildUrl`.
 
 ---
 
 ## Tratamento de Erros
 
-O `apiClient` lança erros com a seguinte estrutura:
+O `apiClient` **não** lança um objeto plano. Ele lança uma classe `ApiError extends Error` (definida em `apiClient.ts`, linhas ~21-33):
 
-```js
-{
-  message: 'Não autorizado',   // mensagem legível
-  status: 401,                  // status HTTP
-  data: { ... }                 // body da resposta de erro, se houver
+```ts
+export class ApiError extends Error {
+  readonly status: number;
+  readonly data: unknown;
+
+  constructor(message: string, status: number, data: unknown = null) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+    this.data = data;
+  }
 }
 ```
 
+- `error.message` — mensagem legível (herdada de `Error`)
+- `error.status: number` — status HTTP (ou `0` para erros de rede/timeout/cancelamento)
+- `error.data: unknown` — body da resposta de erro, se houver (somente leitura)
+
 No service, você pode enriquecer o erro:
 
-```js
-create: async (data) => {
+```ts
+create: async (data: CreateClientInput) => {
   try {
     return await apiClient.post(BASE, data);
   } catch (error) {
-    if (error.status === 409) {
-      throw new Error('Produto com esse nome já existe.');
+    if (error instanceof ApiError && error.status === 409) {
+      throw new Error('Cliente com esse nome já existe.');
     }
     throw error; // relança erros não tratados
   }
@@ -137,14 +189,14 @@ create: async (data) => {
 
 No slice (Redux), capture no `createAsyncThunk`:
 
-```js
-export const createProduct = createAsyncThunk(
-  'products/create',
-  async (data, { rejectWithValue }) => {
+```ts
+export const createClient = createAsyncThunk(
+  'client/create',
+  async (data: CreateClientInput, { rejectWithValue }) => {
     try {
-      return await productService.create(data);
+      return await clientService.create(data);
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue((error as Error).message);
     }
   }
 );
@@ -158,16 +210,19 @@ Variáveis de ambiente no `.env`:
 
 ```
 VITE_API_BASE_URL=https://api.seudominio.com/v1
-VITE_API_TIMEOUT=10000
+VITE_API_TIMEOUT=15000
+VITE_WS_URL=wss://api.seudominio.com
 ```
 
-O `apiClient` lê automaticamente o `VITE_API_BASE_URL`.
+- `VITE_API_BASE_URL` — lido automaticamente pelo `apiClient`
+- `VITE_API_TIMEOUT` — timeout padrão (ms) de cada requisição, usado por `createAbortSignal`
+- `VITE_WS_URL` — endpoint base do WebSocket, usado por `src/hooks/useWebSocket.ts` para o Inbox/agendamentos em tempo real (default: `ws://localhost:8080` se não definido)
 
 ---
 
 ## Autenticação
 
-O token é gerenciado pelo `tokenStorage.js` e injetado automaticamente pelo `apiClient`.
+O token é gerenciado pelo `tokenStorage.ts` e injetado automaticamente pelo `apiClient`.
 
 Fluxo:
 1. Usuário faz login → `authService.login()` retorna o token
