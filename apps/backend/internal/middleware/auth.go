@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
@@ -22,6 +23,7 @@ func JWTAuth(secret string) fiber.Handler {
 
 		c.Locals("branch_id", claims["branch_id"])
 		c.Locals("user_id", claims["user_id"])
+		c.Locals("role", claims["role"])
 		return c.Next()
 	}
 }
@@ -40,7 +42,24 @@ func JWTAuthWS(secret string) fiber.Handler {
 
 		c.Locals("branch_id", claims["branch_id"])
 		c.Locals("user_id", claims["user_id"])
+		c.Locals("role", claims["role"])
 		return c.Next()
+	}
+}
+
+// RequireRole restricts a route to the given JWT roles. Must be chained after
+// JWTAuth, which populates c.Locals("role") — RequireRole does not parse the token.
+func RequireRole(roles ...string) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		role, _ := c.Locals("role").(string)
+		for _, allowed := range roles {
+			if role == allowed {
+				return c.Next()
+			}
+		}
+		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
+			"error": fmt.Sprintf("forbidden: requires role %s", strings.Join(roles, " or ")),
+		})
 	}
 }
 

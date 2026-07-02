@@ -107,6 +107,7 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 	claims := jwt.MapClaims{
 		"user_id":   user.ID,
 		"branch_id": user.BranchID,
+		"role":      user.Role,
 		"exp":       time.Now().Add(72 * time.Hour).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

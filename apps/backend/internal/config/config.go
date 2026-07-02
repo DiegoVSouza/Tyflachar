@@ -1,6 +1,7 @@
 package config
 
 import (
+	"log"
 	"os"
 	"strconv"
 
@@ -8,6 +9,7 @@ import (
 )
 
 type Config struct {
+	AppEnv         string
 	AppPort        string
 	DatabaseURL    string
 	RedisURL       string
@@ -31,7 +33,8 @@ func Load() *Config {
 
 	defaultBranchID, _ := strconv.Atoi(getEnv("DEFAULT_BRANCH_ID", "1"))
 
-	return &Config{
+	cfg := &Config{
+		AppEnv:            getEnv("APP_ENV", "development"),
 		AppPort:           getEnv("APP_PORT", "8080"),
 		DatabaseURL:       getEnv("DATABASE_URL", ""),
 		RedisURL:          getEnv("REDIS_URL", ""),
@@ -45,6 +48,19 @@ func Load() *Config {
 		DefaultBranchID:   defaultBranchID,
 		AnthropicAPIKey:   getEnv("ANTHROPIC_API_KEY", ""),
 		AnthropicModel:    getEnv("ANTHROPIC_MODEL", "claude-haiku-4-5-20251001"),
+	}
+
+	cfg.validate()
+	return cfg
+}
+
+// validate enforces META_APP_SECRET in production
+func (cfg *Config) validate() {
+	if cfg.AppEnv == "production" && cfg.MetaAppSecret == "" {
+		log.Fatal("❌ META_APP_SECRET não definido em produção (APP_ENV=production) — a validação HMAC do webhook do WhatsApp ficaria desabilitada, aceitando qualquer payload sem verificar a origem. Configure META_APP_SECRET antes de subir a aplicação.")
+	}
+	if cfg.MetaAppSecret == "" {
+		log.Println("ℹ️  META_APP_SECRET não definido — validação HMAC do webhook está DESABILITADA (permissivo). Aceitável fora de produção; nunca faça deploy de produção assim.")
 	}
 }
 

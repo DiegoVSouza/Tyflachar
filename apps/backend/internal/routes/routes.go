@@ -40,6 +40,8 @@ func Setup(app *fiber.App, d Deps) {
 	api.Post("/auth/login", d.Auth.Login)
 
 	// Auth + all dashboard routes (JWT required)
+	// middleware.RequireRole("admin") can be chained after JWTAuth once an
+	// admin-only route exists (none do yet).
 	protected := api.Group("", middleware.JWTAuth(d.Cfg.JWTSecret))
 
 	protected.Get("/auth/me", d.Auth.GetMe)
