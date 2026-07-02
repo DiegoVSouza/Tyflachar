@@ -91,7 +91,7 @@
   "pages": {
     "landing": {
       "hero": {
-        "imageSrc": "/clients/hairdresser/images/hero.jpg",
+        "imageSrc": "/clients/hairdresser/images/hero.webp",
         "headline": "A Arte de Esculpir",
         "headlineEm": "Seus Cachos",
         "subtext": "Especialistas na curadoria de texturas naturais. Elevamos a beleza das onduladas, cacheadas e crespas através de experiências personalizadas de alta performance.",
@@ -100,7 +100,7 @@
       },
       "philosophy": {
         "eyebrow": "Nossa Filosofia",
-        "imageSrc": "/clients/hairdresser/images/gallery-01.jpg",
+        "imageSrc": "/clients/hairdresser/images/gallery-01.webp",
         "imageAlt": "Mãos do estilista cuidando de um cacho",
         "quote": "Cachos são versos de uma história que merece ser contada com amor.",
         "titleLine1": "Esculpir, Nutrir e",
@@ -147,22 +147,22 @@
         "instagramLabel": "Ver Instagram",
         "items": [
           {
-            "src": "/clients/hairdresser/images/gallery-02.jpg",
+            "src": "/clients/hairdresser/images/gallery-02.webp",
             "alt": "Coleção de texturas de cachos",
             "span": "large"
           },
           {
-            "src": "/clients/hairdresser/images/gallery-03.jpg",
+            "src": "/clients/hairdresser/images/gallery-03.webp",
             "alt": "Ondas 2C com balayage",
             "span": "small"
           },
           {
-            "src": "/clients/hairdresser/images/gallery-04.jpg",
+            "src": "/clients/hairdresser/images/gallery-04.webp",
             "alt": "Afro puff 4C",
             "span": "tall"
           },
           {
-            "src": "/clients/hairdresser/images/gallery-05.jpg",
+            "src": "/clients/hairdresser/images/gallery-05.webp",
             "alt": "Cachos 3B espirais",
             "span": "small"
           }
