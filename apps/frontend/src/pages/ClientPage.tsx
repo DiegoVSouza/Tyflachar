@@ -17,6 +17,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { ClientConfig } from 'types/client.types';
 import { LandingPageTemplate } from 'templates/LandingPageTemplate';
+import { useClientTheme } from 'hooks/useClientTheme';
 
 /* ── Registry de clientes disponíveis ────────────────────── */
 type PageType = 'landing' | 'blog' | 'linktree';
@@ -31,14 +32,12 @@ const CLIENT_REGISTRY: Record<string, () => Promise<{ default: ClientConfig }>> 
   hairdresser: () => import('clients/hairdresser/config.json') as Promise<{ default: ClientConfig }>,
 };
 
-/* ── Utilitário: aplica tema via data-tenant no <html> ───────
-   O tokens.css define [data-tenant='slug'] com todos os overrides.
-   Nenhuma var é injetada inline — tudo fica no CSS estático.       */
-function applyTheme(config: ClientConfig): () => void {
+/* ── Utilitário: metadados de documento + atributo data-tenant ───────
+   Tema em si vive em hooks/useClientTheme.ts.                            */
+function applyDocumentMeta(config: ClientConfig): () => void {
   const root = document.documentElement;
   const { slug } = config;
 
-  // Aplica o tenant — ativa os tokens da Camada 3 no tokens.css
   root.setAttribute('data-tenant', slug);
 
   // Meta theme-color do browser
@@ -93,10 +92,11 @@ export function ClientPage({ page }: ClientPageProps): React.ReactElement {
     return () => { cancelled = true; };
   }, [clientSlug]);
 
-  // Aplica tema assim que o config carrega
+  useClientTheme(config?.theme);
+
   useEffect(() => {
     if (!config) return;
-    return applyTheme(config);
+    return applyDocumentMeta(config);
   }, [config]);
 
   /* Slug não encontrado no registry → 404 */

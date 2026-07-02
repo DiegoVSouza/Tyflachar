@@ -1,35 +1,35 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { clientService, type ListClientsFilters } from 'services/api/clientService';
 import type {
-  Cliente,
-  client_id,
-  AtualizarClienteInput,
-  Agendamento,
+  Client,
+  ClientId,
+  UpdateClientInput,
+  Appointment,
   LoadStatus,
 } from 'types';
 import type { RootState } from '../index';
 
 interface ClientState {
-  clientes: Cliente[];
+  clients: Client[];
   total: number;
-  clienteSelecionadoId: client_id | null;
-  agendamentosDoCliente: Agendamento[];
+  selectedClientId: ClientId | null;
+  clientAppointments: Appointment[];
   status: LoadStatus;
-  detalhesStatus: LoadStatus;
+  detailsStatus: LoadStatus;
   error: string | null;
 }
 
 const initialState: ClientState = {
-  clientes: [],
+  clients: [],
   total: 0,
-  clienteSelecionadoId: null,
-  agendamentosDoCliente: [],
+  selectedClientId: null,
+  clientAppointments: [],
   status: 'idle',
-  detalhesStatus: 'idle',
+  detailsStatus: 'idle',
   error: null,
 };
 
-export const fetchClientes = createAsyncThunk(
+export const fetchClients = createAsyncThunk(
   'client/fetchClients',
   async (filters: ListClientsFilters = {}, { rejectWithValue }) => {
     try {
@@ -40,9 +40,9 @@ export const fetchClientes = createAsyncThunk(
   }
 );
 
-export const fetchAgendamentosDoCliente = createAsyncThunk(
+export const fetchClientAppointments = createAsyncThunk(
   'client/fetchClientAppointments',
-  async (id: client_id, { rejectWithValue }) => {
+  async (id: ClientId, { rejectWithValue }) => {
     try {
       return await clientService.getAppointments(id);
     } catch (error) {
@@ -51,14 +51,14 @@ export const fetchAgendamentosDoCliente = createAsyncThunk(
   }
 );
 
-export const atualizarTagsCliente = createAsyncThunk(
+export const updateClientTags = createAsyncThunk(
   'client/updateTags',
   async (
-    { id, data }: { id: client_id; data: AtualizarClienteInput },
+    { id, data }: { id: ClientId; data: UpdateClientInput },
     { rejectWithValue }
   ) => {
     try {
-      return await clientService.update(id, data);
+      return await clientService.updateTags(id, data);
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
@@ -69,9 +69,9 @@ const clientSlice = createSlice({
   name: 'client',
   initialState,
   reducers: {
-    selecionarCliente(state, action: { payload: client_id | null }) {
-      state.clienteSelecionadoId = action.payload;
-      if (!action.payload) state.agendamentosDoCliente = [];
+    selectClient(state, action: { payload: ClientId | null }) {
+      state.selectedClientId = action.payload;
+      if (!action.payload) state.clientAppointments = [];
     },
     clearClientError(state) {
       state.error = null;
@@ -79,51 +79,50 @@ const clientSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchClientes.pending, (state) => {
+      .addCase(fetchClients.pending, (state) => {
         state.status = 'loading';
         state.error = null;
       })
-      .addCase(fetchClientes.fulfilled, (state, action) => {
+      .addCase(fetchClients.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.clientes = action.payload.items;
+        state.clients = action.payload.items;
         state.total = action.payload.total;
       })
-      .addCase(fetchClientes.rejected, (state, action) => {
+      .addCase(fetchClients.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload as string;
       });
 
     builder
-      .addCase(fetchAgendamentosDoCliente.pending, (state) => {
-        state.detalhesStatus = 'loading';
+      .addCase(fetchClientAppointments.pending, (state) => {
+        state.detailsStatus = 'loading';
       })
-      .addCase(fetchAgendamentosDoCliente.fulfilled, (state, action) => {
-        state.detalhesStatus = 'succeeded';
-        state.agendamentosDoCliente = action.payload;
+      .addCase(fetchClientAppointments.fulfilled, (state, action) => {
+        state.detailsStatus = 'succeeded';
+        state.clientAppointments = action.payload;
       })
-      .addCase(fetchAgendamentosDoCliente.rejected, (state, action) => {
-        state.detalhesStatus = 'failed';
+      .addCase(fetchClientAppointments.rejected, (state, action) => {
+        state.detailsStatus = 'failed';
         state.error = action.payload as string;
       });
 
-    builder.addCase(atualizarTagsCliente.fulfilled, (state, action) => {
-      const idx = state.clientes.findIndex((c) => c.id === action.payload.id);
-      if (idx !== -1) state.clientes[idx] = action.payload;
+    builder.addCase(updateClientTags.fulfilled, (state, action) => {
+      const idx = state.clients.findIndex((c) => c.id === action.payload.id);
+      if (idx !== -1) state.clients[idx] = action.payload;
     });
   },
 });
 
-export const { selecionarCliente, clearClientError } = clientSlice.actions;
+export const { selectClient, clearClientError } = clientSlice.actions;
 
-export const selectClientes = (state: RootState) => state.client.clientes;
-export const selectTotalClientes = (state: RootState) => state.client.total;
-export const selectClienteSelecionadoId = (state: RootState) => state.client.clienteSelecionadoId;
-export const selectClienteSelecionado = (state: RootState) =>
-  state.client.clientes.find((c) => c.id === state.client.clienteSelecionadoId) ?? null;
-export const selectAgendamentosDoCliente = (state: RootState) =>
-  state.client.agendamentosDoCliente;
-export const selectClienteStatus = (state: RootState) => state.client.status;
-export const selectClienteIsLoading = (state: RootState) => state.client.status === 'loading';
-export const selectClienteError = (state: RootState) => state.client.error;
+export const selectClients = (state: RootState) => state.client.clients;
+export const selectTotalClients = (state: RootState) => state.client.total;
+export const selectSelectedClientId = (state: RootState) => state.client.selectedClientId;
+export const selectSelectedClient = (state: RootState) =>
+  state.client.clients.find((c) => c.id === state.client.selectedClientId) ?? null;
+export const selectClientAppointments = (state: RootState) => state.client.clientAppointments;
+export const selectClientStatus = (state: RootState) => state.client.status;
+export const selectClientIsLoading = (state: RootState) => state.client.status === 'loading';
+export const selectClientError = (state: RootState) => state.client.error;
 
 export default clientSlice.reducer;

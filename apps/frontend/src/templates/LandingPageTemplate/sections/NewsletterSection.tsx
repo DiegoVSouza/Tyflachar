@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styles from '../LandingPage.module.css';
 import { NewsletterConfig } from 'types/client.types';
 
@@ -6,7 +6,7 @@ interface NewsletterSectionProps {
   config: NewsletterConfig;
 }
 
-export function NewsletterSection({ config }: NewsletterSectionProps): React.ReactElement {
+function NewsletterSectionBase({ config }: NewsletterSectionProps): React.ReactElement {
   return (
     <section className={`${styles.newsletter} ${styles.fadeIn}`}>
       <div className={styles.newsletterBox}>
@@ -16,6 +16,8 @@ export function NewsletterSection({ config }: NewsletterSectionProps): React.Rea
               src={config.logoBadgeSrc}
               alt=""
               className={styles.newsletterLogo}
+              loading="lazy"
+              decoding="async"
             />
           </div>
         )}
@@ -33,3 +35,5 @@ export function NewsletterSection({ config }: NewsletterSectionProps): React.Rea
     </section>
   );
 }
+
+export const NewsletterSection = memo(NewsletterSectionBase);

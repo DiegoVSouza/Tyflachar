@@ -52,7 +52,7 @@ export function useUsers(
   const total = useSelector(selectUsersTotal);
 
   // Stable serialisation to avoid effect re-runs on each render
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   const filtersKey = JSON.stringify(filters);
 
   useEffect(() => {
@@ -60,14 +60,14 @@ export function useUsers(
       dispatch(fetchUsers(JSON.parse(filtersKey) as UserFilters));
     }
     // filtersKey is a stable JSON string — safe as dep
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [dispatch, autoFetch, filtersKey]);
 
   const fetch = useCallback(
     (customFilters?: UserFilters) => {
       dispatch(fetchUsers(customFilters ?? (JSON.parse(filtersKey) as UserFilters)));
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [dispatch, filtersKey]
   );
 

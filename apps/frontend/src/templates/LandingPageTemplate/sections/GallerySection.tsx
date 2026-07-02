@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styles from '../LandingPage.module.css';
 import { GalleryConfig } from 'types/client.types';
 
@@ -6,7 +6,7 @@ interface GallerySectionProps {
   config: GalleryConfig;
 }
 
-export function GallerySection({ config }: GallerySectionProps): React.ReactElement {
+function GallerySectionBase({ config }: GallerySectionProps): React.ReactElement {
   return (
     <section className={`${styles.gallery} ${styles.fadeIn}`} id="team">
       <div className={styles.galleryHeader}>
@@ -22,10 +22,18 @@ export function GallerySection({ config }: GallerySectionProps): React.ReactElem
             key={alt}
             className={`${styles.galleryItem} ${styles[`galleryItem__${span}`]}`}
           >
-            <img src={src} alt={alt} className={styles.galleryImg} />
+            <img
+              src={src}
+              alt={alt}
+              className={styles.galleryImg}
+              loading="lazy"
+              decoding="async"
+            />
           </div>
         ))}
       </div>
     </section>
   );
 }
+
+export const GallerySection = memo(GallerySectionBase);

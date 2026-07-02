@@ -1,14 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useNotifications } from 'hooks/useNotifications';
-import type { ConversaId } from 'types';
+import { useConversationToasts } from 'hooks/useConversationToasts';
+import type { ConversationId } from 'types';
 import styles from './ToastContainer.module.css';
 
 export function ToastContainer(): React.ReactElement {
-  const { toasts, dismissToast } = useNotifications();
+  const { toasts, dismissToast } = useConversationToasts();
   const navigate = useNavigate();
 
-  function goToConversation(conversationId: ConversaId, toastId: number) {
+  function goToConversation(conversationId: ConversationId, toastId: number) {
     dismissToast(toastId);
     navigate(`/dashboard/inbox?conversation=${conversationId}`);
   }

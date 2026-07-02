@@ -4,6 +4,9 @@ import { addNotification, removeNotification } from 'store/slices/uiSlice';
 import type { AppDispatch } from 'store';
 import type { NotificationType } from 'types';
 
+// Generic app-wide notification dispatcher via uiSlice/Redux.
+// Unrelated to useConversationToasts (WebSocket-driven "new message" toasts, local state).
+
 interface NotifyApi {
   success: (message: string, duration?: number) => void;
   error: (message: string, duration?: number) => void;
@@ -11,12 +14,12 @@ interface NotifyApi {
   info: (message: string, duration?: number) => void;
 }
 
-interface UseNotificationReturn {
+interface UseToastNotificationReturn {
   notify: NotifyApi;
   dismiss: (id: number) => void;
 }
 
-export function useNotification(): UseNotificationReturn {
+export function useToastNotification(): UseToastNotificationReturn {
   const dispatch = useDispatch<AppDispatch>();
 
   const show = useCallback(

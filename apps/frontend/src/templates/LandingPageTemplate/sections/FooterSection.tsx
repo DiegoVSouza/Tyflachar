@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styles from '../LandingPage.module.css';
 import { FooterConfig, ClientBrand } from 'types/client.types';
 
@@ -7,7 +7,7 @@ interface FooterSectionProps {
   brand: ClientBrand;
 }
 
-export function FooterSection({ config, brand }: FooterSectionProps): React.ReactElement {
+function FooterSectionBase({ config, brand }: FooterSectionProps): React.ReactElement {
   return (
     <footer className={styles.footer}>
       <div className={styles.footerGrid}>
@@ -17,6 +17,8 @@ export function FooterSection({ config, brand }: FooterSectionProps): React.Reac
               src={brand.logoSrc}
               alt={`${brand.name} logo`}
               className={styles.footerLogo}
+              loading="lazy"
+              decoding="async"
             />
             <span className={styles.footerName}>{brand.name}</span>
           </div>
@@ -50,3 +52,5 @@ export function FooterSection({ config, brand }: FooterSectionProps): React.Reac
     </footer>
   );
 }
+
+export const FooterSection = memo(FooterSectionBase);

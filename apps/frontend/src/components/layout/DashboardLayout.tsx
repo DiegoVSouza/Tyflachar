@@ -39,7 +39,7 @@ export function DashboardLayout(): React.ReactElement {
     <div className={styles.layout}>
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
-          <span className={styles.logo}></span>
+          <span className={styles.logo} />
           <span className={styles.salonName}>
             Tyflachar
           </span>

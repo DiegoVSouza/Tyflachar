@@ -35,7 +35,7 @@ export function Button({
 
   return (
     <button
-      // eslint-disable-next-line react/button-has-type
+       
       type={type}
       disabled={disabled || isLoading}
       className={classes}

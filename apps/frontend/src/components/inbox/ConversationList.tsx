@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import type { Conversation, ConversationId, ConversationStatus } from 'types';
+import React from 'react';
+import type { Conversation, ConversationId } from 'types';
 import { ConversationItem } from './ConversationItem';
 import styles from './ConversationList.module.css';
-
-type StatusFilter = 'all' | ConversationStatus;
 
 interface Props {
   conversations: Conversation[];

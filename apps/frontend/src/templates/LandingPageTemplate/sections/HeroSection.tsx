@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styles from '../LandingPage.module.css';
 import { HeroConfig } from 'types/client.types';
 
@@ -7,7 +7,7 @@ interface HeroSectionProps {
   ctaHref?: string;
 }
 
-export function HeroSection({ config, ctaHref }: HeroSectionProps): React.ReactElement {
+function HeroSectionBase({ config, ctaHref }: HeroSectionProps): React.ReactElement {
   return (
     <section className={styles.hero}>
       <div className={styles.heroBg}>
@@ -15,6 +15,9 @@ export function HeroSection({ config, ctaHref }: HeroSectionProps): React.ReactE
           src={config.imageSrc}
           alt="Hero"
           className={styles.heroImg}
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
         />
         <div className={styles.heroOverlay} />
       </div>
@@ -40,3 +43,5 @@ export function HeroSection({ config, ctaHref }: HeroSectionProps): React.ReactE
     </section>
   );
 }
+
+export const HeroSection = memo(HeroSectionBase);

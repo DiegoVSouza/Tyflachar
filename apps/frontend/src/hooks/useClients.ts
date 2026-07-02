@@ -3,50 +3,50 @@ import { useSelector, useDispatch } from 'react-redux';
 import type { AppDispatch } from 'store';
 import type { ClientId, UpdateClientInput } from 'types';
 import {
-  fetchClientes,
-  fetchAgendamentosDoCliente,
-  atualizarTagsCliente,
-  selecionarCliente,
-  selectClientes,
-  selectTotalClientes,
-  selectClienteSelecionado,
-  selectAgendamentosDoCliente,
-  selectClienteStatus,
-  selectClienteIsLoading,
-  selectClienteError,
+  fetchClients,
+  fetchClientAppointments,
+  updateClientTags,
+  selectClient,
+  selectClients,
+  selectTotalClients,
+  selectSelectedClient,
+  selectClientAppointments,
+  selectClientStatus,
+  selectClientIsLoading,
+  selectClientError,
 } from 'store/slices/clientSlice';
 import type { ListClientsFilters } from 'services/api/clientService';
 
 export function useClients(filters: ListClientsFilters = {}) {
   const dispatch = useDispatch<AppDispatch>();
 
-  const clients = useSelector(selectClientes);
-  const total = useSelector(selectTotalClientes);
-  const selectedClient = useSelector(selectClienteSelecionado);
-  const clientAppointments = useSelector(selectAgendamentosDoCliente);
-  const status = useSelector(selectClienteStatus);
-  const isLoading = useSelector(selectClienteIsLoading);
-  const error = useSelector(selectClienteError);
+  const clients = useSelector(selectClients);
+  const total = useSelector(selectTotalClients);
+  const selectedClient = useSelector(selectSelectedClient);
+  const clientAppointments = useSelector(selectClientAppointments);
+  const status = useSelector(selectClientStatus);
+  const isLoading = useSelector(selectClientIsLoading);
+  const error = useSelector(selectClientError);
 
   const load = useCallback(() => {
-    dispatch(fetchClientes(filters));
+    dispatch(fetchClients(filters));
   }, [dispatch, JSON.stringify(filters)]); // eslint-disable-line
 
   const openClient = useCallback(
     (id: ClientId) => {
-      dispatch(selecionarCliente(id));
-      dispatch(fetchAgendamentosDoCliente(id));
+      dispatch(selectClient(id));
+      dispatch(fetchClientAppointments(id));
     },
     [dispatch]
   );
 
   const closeClient = useCallback(() => {
-    dispatch(selecionarCliente(null));
+    dispatch(selectClient(null));
   }, [dispatch]);
 
   const updateTags = useCallback(
     (id: ClientId, data: UpdateClientInput) =>
-      dispatch(atualizarTagsCliente({ id, data })),
+      dispatch(updateClientTags({ id, data })),
     [dispatch]
   );
 

@@ -3,6 +3,9 @@ import { useSelector } from 'react-redux';
 import type { Message, ConversationId } from 'types';
 import { selectSelectedConversationId, selectConversations } from 'store/slices/conversationSlice';
 
+// "New message" toasts driven by conversationToastBus (fed from hooks/useWebSocket.ts).
+// Unrelated to useToastNotification (generic app banners via uiSlice/Redux).
+
 export interface ToastItem {
   id: number;
   message: string;
@@ -13,7 +16,7 @@ export interface ToastItem {
 type Handler = (_conversationId: ConversationId, _message: Message) => void;
 const handlers = new Set<Handler>();
 
-export const notificationEventBus = {
+export const conversationToastBus = {
   emit(conversationId: ConversationId, message: Message) {
     handlers.forEach((h) => h(conversationId, message));
   },
@@ -26,7 +29,7 @@ export const notificationEventBus = {
 let toastIdCounter = 0;
 const TOAST_DURATION_MS = 5000;
 
-export function useNotifications() {
+export function useConversationToasts() {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const selectedConversationId = useSelector(selectSelectedConversationId);
   const conversations = useSelector(selectConversations);
@@ -36,7 +39,7 @@ export function useNotifications() {
   }, []);
 
   useEffect(() => {
-    const unsubscribe = notificationEventBus.subscribe((conversationId, message) => {
+    const unsubscribe = conversationToastBus.subscribe((conversationId, message) => {
       if (conversationId === selectedConversationId) return;
 
       const conversation = conversations.find((c) => c.id === conversationId);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styles from '../LandingPage.module.css';
 import { NavConfig, ClientBrand } from 'types/client.types';
 
@@ -8,12 +8,18 @@ interface NavSectionProps {
   navRef: React.RefObject<HTMLElement>;
 }
 
-export function NavSection({ config, brand, navRef }: NavSectionProps): React.ReactElement {
+function NavSectionBase({ config, brand, navRef }: NavSectionProps): React.ReactElement {
   return (
     <nav ref={navRef} className={styles.nav}>
       <div className={styles.navInner}>
         <div className={styles.navBrand}>
-          <img src={brand.logoSrc} alt={`${brand.name} logo`} style={{ height: 40, width: 'auto' }} />
+          <img
+            src={brand.logoSrc}
+            alt={`${brand.name} logo`}
+            style={{ height: 40, width: 'auto' }}
+            loading="eager"
+            decoding="async"
+          />
           <span className={styles.navName}>{brand.name}</span>
         </div>
         <div className={styles.navLinks}>
@@ -34,3 +40,5 @@ export function NavSection({ config, brand, navRef }: NavSectionProps): React.Re
     </nav>
   );
 }
+
+export const NavSection = memo(NavSectionBase);

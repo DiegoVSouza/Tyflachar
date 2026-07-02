@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styles from '../LandingPage.module.css';
 import { PhilosophyConfig } from 'types/client.types';
 
@@ -6,13 +6,13 @@ interface PhilosophySectionProps {
   config: PhilosophyConfig;
 }
 
-export function PhilosophySection({ config }: PhilosophySectionProps): React.ReactElement {
+function PhilosophySectionBase({ config }: PhilosophySectionProps): React.ReactElement {
   return (
     <section className={`${styles.filosofia} ${styles.fadeIn}`} id="salon">
       <div className={styles.filosofiaImg}>
-        <img src={config.imageSrc} alt={config.imageAlt} />
+        <img src={config.imageSrc} alt={config.imageAlt} loading="lazy" decoding="async" />
         <blockquote className={styles.filosofiaQuote}>
-          "{config.quote}"
+          &quot;{config.quote}&quot;
         </blockquote>
       </div>
       <div className={styles.filosofiaBody}>
@@ -32,3 +32,5 @@ export function PhilosophySection({ config }: PhilosophySectionProps): React.Rea
     </section>
   );
 }
+
+export const PhilosophySection = memo(PhilosophySectionBase);

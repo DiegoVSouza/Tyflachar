@@ -35,7 +35,7 @@ export function useConversations(filters: ListConversationsFilters = {}) {
 
   const loadConversations = useCallback(() => {
     dispatch(fetchConversations(filters));
-  }, [dispatch, JSON.stringify(filters)]);
+  }, [dispatch, JSON.stringify(filters)]); // eslint-disable-line
 
   const openConversation = useCallback(
     (id: ConversationId) => {

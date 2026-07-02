@@ -34,11 +34,14 @@ export class ApiError extends Error {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function buildHeaders(extraHeaders: HeadersInit = {}): HeadersInit {
+function buildHeaders(extraHeaders: HeadersInit = {}, skipDefaultContentType = false): HeadersInit {
   const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
     Accept: 'application/json',
   };
+
+  if (!skipDefaultContentType) {
+    headers['Content-Type'] = 'application/json';
+  }
 
   const token = tokenStorage.getToken();
   if (token) {
@@ -134,11 +137,12 @@ async function request<T = unknown>(endpoint: string, options: RequestOptions = 
   const { signal, cleanup } = createAbortSignal(timeout, externalSignal);
 
   const url = endpoint.startsWith('http') ? endpoint : `${BASE_URL}${endpoint}`;
+  const isFormData = fetchOptions.body instanceof FormData;
 
   try {
     const response = await fetch(url, {
       ...fetchOptions,
-      headers: buildHeaders(extraHeaders),
+      headers: buildHeaders(extraHeaders, isFormData),
       signal,
     });
 
