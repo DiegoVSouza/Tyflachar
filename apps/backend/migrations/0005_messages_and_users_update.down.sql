@@ -1,0 +1,2 @@
+ALTER TABLE dashboard_users DROP COLUMN IF EXISTS name;
+ALTER TABLE messages DROP COLUMN IF EXISTS read;

@@ -1,0 +1,3 @@
+UPDATE clients SET name = '' WHERE name IS NULL;
+ALTER TABLE clients ALTER COLUMN name SET DEFAULT '';
+ALTER TABLE clients ALTER COLUMN name SET NOT NULL;

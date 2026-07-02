@@ -47,6 +47,11 @@ Write-Host "  Tudo rodando em terminais separados." -ForegroundColor Cyan
 Write-Host "  Feche as janelas para encerrar." -ForegroundColor Cyan
 Write-Host "======================================" -ForegroundColor Cyan
 Write-Host ""
+Write-Host "  Banco vazio? O seed de dev (filial, login admin@test.com/admin123," -ForegroundColor DarkGray
+Write-Host "  clientes/conversas de exemplo) nao roda mais automaticamente." -ForegroundColor DarkGray
+Write-Host "  Rode manualmente, apos o backend subir e aplicar as migrations:" -ForegroundColor DarkGray
+Write-Host "    cd apps\backend; go run scripts\seed\main.go" -ForegroundColor DarkGray
+Write-Host ""
 
 # Opcional: abre o browser automaticamente
 Start-Sleep -Seconds 4

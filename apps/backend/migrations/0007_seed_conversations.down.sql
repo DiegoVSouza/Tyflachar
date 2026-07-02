@@ -1,0 +1,2 @@
+-- No-op: o .up.sql desta migration foi esvaziado (ver 0007_seed_conversations.up.sql) e
+-- não insere mais dados de seed, então não há nada a reverter aqui.
